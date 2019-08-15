@@ -34,7 +34,9 @@
   },
   "web_accessible_resources": [
     "modal-iframe.html",
-    "data/icons/icon_original.png"
+    "data/icons/icon_original.png",
+    "iframe/iframe.html",
+    "data/icons/loading.gif"
   ],
   "content_scripts": [
     {
@@ -42,7 +44,7 @@
         "<all_urls>"
       ],
       "js": [
-        "index_fixed_position.js"
+        "index_iframe_test.js"
       ],
       "css": [
         "index.css"
