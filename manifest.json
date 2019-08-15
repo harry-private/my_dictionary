@@ -1,0 +1,53 @@
+{
+  "manifest_version": 2,
+  "name": "My Dictionary",
+  "description": "Multiple dictionary",
+  "version": "1.3.2",
+  "permissions": [
+    "storage",
+    "tabs",
+    "contextMenus",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "dictionaries_data.js",
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": "data/icons/icon16.png",
+    "default_title": "Double click plugin for cambridge dictionary",
+    "default_popup": "options.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "data/icons/icon16.png",
+    "48": "data/icons/icon48.png",
+    "128": "data/icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    "modal-iframe.html",
+    "data/icons/icon_original.png"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "index_fixed_position.js"
+      ],
+      "css": [
+        "index.css"
+      ],
+      "all_frames": true
+    }
+  ]
+}
