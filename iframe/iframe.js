@@ -3,4 +3,5 @@ let iframe = document.querySelector('iframe');
 iframe.addEventListener('load', () => {
     document.body.dataset.mode = 'ready';
 });
-iframe.src = args.get('url')
+decodeURIComponent(console.log(args.get('url')))
+iframe.src = decodeURIComponent(args.get('url'))

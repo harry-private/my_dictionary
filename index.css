@@ -37,6 +37,7 @@
 }
 
 .my-dictionary-panel .select-dictionary {
+    color: #2c2d2b;
     position: sticky;
     width: 100%;
     height: 36px;

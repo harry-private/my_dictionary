@@ -79,7 +79,7 @@
             // if (!this.selectedText || event.target === this.popup || this.selectedText.includes(' ')) {
             //     return false;
             // }
-            if (!this.selectedText || event.target === this.popup) {
+            if (!this.selectedText.trim() || event.target === this.popup) {
                 return false;
             }
             return true;
@@ -132,7 +132,7 @@
 
                 if (newUrl) { url = newUrl; }
 
-                this.iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + url);
+                this.iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + encodeURIComponent(url));
                 this.panel.appendChild(this.iframe);
             }
         }
