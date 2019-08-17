@@ -185,7 +185,7 @@ function showFlashMessages(messages = [], BGColor = "rgb(6, 178, 184)") {
 
     setTimeout(function() {
         UIflashMessages.style.display = 'none';
-    }, 1000);
+    }, 2000);
 
 }
 
