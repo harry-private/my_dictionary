@@ -72,6 +72,8 @@ function createDictionariesSettingsLayout(result) {
         })
         UIdictionriesSettings.insertAdjacentHTML('beforeend', template);
     });
+
+    changeUrlOfPreIntalledDictionaries();
 }
 
 function getDictionariesFromInputs(dictionaries) {
@@ -81,6 +83,8 @@ function getDictionariesFromInputs(dictionaries) {
         let dictionaryTitle = dictionary.querySelector(".dictionary-title").value;
         let dictionaryId = dictionary.querySelector(".dictionary-id").value;
         let dictionaryUrl = dictionary.querySelector(".dictionary-url").value;
+        console.log('dictionaryUrl: ', dictionaryUrl);
+
         let dictionaryPreInstalled = dictionary.querySelector(".dictionary-preinstalled").value;
         let dictionaryIsHidden = dictionary.querySelector('.dictionary-ishidden');
         if (dictionaryIsHidden) {
@@ -92,14 +96,14 @@ function getDictionariesFromInputs(dictionaries) {
             if (dictionary.id == 'google-translate') {
                 let dictionaryFrom = dictionary.querySelector(".dictionary-from");
                 let dictionaryTo = dictionary.querySelector(".dictionary-to");
-                let dictionaryFromSelected = dictionaryFrom.options[dictionaryFrom.selectedIndex].value
-                let dictionaryToSelected = dictionaryTo.options[dictionaryTo.selectedIndex].value
+                let dictionaryFromSelected = getSelectedOption(dictionaryFrom)
+                let dictionaryToSelected = getSelectedOption(dictionaryTo)
                 dictionariesToStoreObj.from = dictionaryFromSelected
                 dictionariesToStoreObj.to = dictionaryToSelected
                 dictionariesToStoreObj.isGoogleTranslate = true;
             } else {
                 let dictionaryFromTo = dictionary.querySelector(".dictionary-from-to");
-                let dictionaryFromToSelected = dictionaryFromTo.options[dictionaryFromTo.selectedIndex].value
+                let dictionaryFromToSelected = getSelectedOption(dictionaryFromTo);
                 dictionariesToStoreObj.fromTo = dictionaryFromToSelected;
             }
         }
@@ -290,4 +294,46 @@ function eventListenerForSideOptions() {
         });
 
     }
+}
+
+function changeUrlOfPreIntalledDictionaries() {
+    UIallDictionaries = UIdictionriesSettings.querySelectorAll(".dictionary");
+
+    [...UIallDictionaries].forEach(function(dictionary) {
+        let UIdictionaryPreinstalled = dictionary.querySelector('.dictionary-preinstalled')
+        if (UIdictionaryPreinstalled.value == 'true') {
+            let dictionaryId = dictionary.querySelector('.dictionary-id').value;
+            let dictionaryUrl = dictionary.querySelector('.dictionary-url');
+            if (dictionary.getAttribute("id") == 'google-translate') {
+                console.log("I'm Google Translate, you faggot!");
+                let UIdictionaryFrom = dictionary.querySelector('.dictionary-from');
+                let UIdictionaryTo = dictionary.querySelector('.dictionary-to');
+                UIdictionaryFrom.addEventListener('change', function(e) {
+                    let selectedDctionaryFrom = getSelectedOption(UIdictionaryFrom);
+                    let selectedDctionaryTo = getSelectedOption(UIdictionaryTo);
+                    let newUrl = dictionariesData[dictionaryId].generateUrl(selectedDctionaryFrom, selectedDctionaryTo)
+                    dictionaryUrl.value = newUrl;
+                })
+                UIdictionaryTo.addEventListener('change', function(e) {
+                    let selectedDctionaryFrom = getSelectedOption(UIdictionaryFrom);
+                    let selectedDctionaryTo = getSelectedOption(UIdictionaryTo);
+                    let newUrl = dictionariesData[dictionaryId].generateUrl(selectedDctionaryFrom, selectedDctionaryTo)
+                    dictionaryUrl.value = newUrl;
+                })
+            } else {
+                let UIdictionaryFromTo = dictionary.querySelector('.dictionary-from-to');
+                UIdictionaryFromTo.addEventListener('change', function(e) {
+                    let selectedDctionaryFromTo = getSelectedOption(UIdictionaryFromTo);
+                    let newUrl = dictionariesData[dictionaryId].generateUrl(selectedDctionaryFromTo)
+                    dictionaryUrl.value = newUrl;
+                })
+            }
+        }
+    });
+
+    // UIfromTo.addEventListener('change', function(e) {alert("You are disgusting!")})
+}
+
+function getSelectedOption(e) {
+    return e.options[e.selectedIndex].value
 }
