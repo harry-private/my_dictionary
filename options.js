@@ -16,7 +16,6 @@ chrome.storage.sync.get(['dictionaries'], result => {
 
         let dictionariesToStore = getDictionariesFromInputs(UIdictionaries);
 
-        console.log("Main", dictionariesToStore);
         // save the dictionaries to the local storage
         chrome.storage.sync.set({
             dictionaries: dictionariesToStore,
@@ -83,7 +82,6 @@ function getDictionariesFromInputs(dictionaries) {
         let dictionaryTitle = dictionary.querySelector(".dictionary-title").value;
         let dictionaryId = dictionary.querySelector(".dictionary-id").value;
         let dictionaryUrl = dictionary.querySelector(".dictionary-url").value;
-        console.log('dictionaryUrl: ', dictionaryUrl);
 
         let dictionaryPreInstalled = dictionary.querySelector(".dictionary-preinstalled").value;
         let dictionaryIsHidden = dictionary.querySelector('.dictionary-ishidden');
@@ -126,7 +124,6 @@ function addNewDictionary() {
     let UIaddNewDictionaryBtn = document.querySelector("#add-new-dictionary-btn");
     let dictionaryTitle = document.querySelector('.add-new-dictionary .dictionary-title');
     let dictionaryUrl = document.querySelector('.add-new-dictionary .dictionary-url');
-    // console.log(dictionaryTitle)
     UIaddNewDictionaryBtn.addEventListener('click', function(e) {
         let error = {};
         // let id = ('_' + Math.random().toString(36).substr(2, 9));
@@ -263,7 +260,6 @@ function eventListenerForSideOptions() {
 
         UIdictionaryEdit.addEventListener('click', function(e) {
             let UIdictionaryEdited = dictionary.querySelector(".dictionary-edited");
-            // console.log(UIdictionaryEdited.style.display)
             if (UIdictionaryEdited.style.display === 'none') {
                 UIdictionaryEdited.style.display = ""
             } else {
@@ -305,7 +301,6 @@ function changeUrlOfPreIntalledDictionaries() {
             let dictionaryId = dictionary.querySelector('.dictionary-id').value;
             let dictionaryUrl = dictionary.querySelector('.dictionary-url');
             if (dictionary.getAttribute("id") == 'google-translate') {
-                console.log("I'm Google Translate, you faggot!");
                 let UIdictionaryFrom = dictionary.querySelector('.dictionary-from');
                 let UIdictionaryTo = dictionary.querySelector('.dictionary-to');
                 UIdictionaryFrom.addEventListener('change', function(e) {

@@ -1,6 +1,5 @@
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function(details) {
-        console.log(details)
         return { requestHeaders: details.requestHeaders };
     }, { urls: ["<all_urls>"] },
     ["blocking", "requestHeaders"]);
@@ -8,7 +7,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
 
 chrome.webRequest.onHeadersReceived.addListener(function(info) {
-        console.log(info)
         // return;
         let initiator = (info.initiator || info.originUrl);
         if (
@@ -16,16 +14,7 @@ chrome.webRequest.onHeadersReceived.addListener(function(info) {
             (initiator == 'https://github.com') ||
             (info.type == 'sub_frame')
         ) {
-            // alert("I have been reached.")
-            // console.log(info)
-            // console.log("Initiator:- ", info.initiator);
-            // console.log("Type:- ", info.type);
-            // console.log("Url:- ", info.url);
-
-
-            console.table([{ "Initiator": info.initiator }, { "Type": info.type }, { "URL": info.url }])
             var headers = info.responseHeaders;
-            // console.log(headers)
             for (var i = headers.length - 1; i >= 0; --i) {
                 var header = headers[i].name.toLowerCase();
                 if (header == 'x-frame-options' || header == 'frame-options') {
@@ -37,7 +26,6 @@ chrome.webRequest.onHeadersReceived.addListener(function(info) {
                     headers.splice(i, 1); // Remove header
                 }
             }
-            console.log(headers)
             return {
                 responseHeaders: headers
             };

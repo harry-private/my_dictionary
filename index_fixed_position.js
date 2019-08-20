@@ -61,7 +61,7 @@
             this.relative = document.body.parentNode.getBoundingClientRect();
         }
         getBCR() {
-            // console.log(this.selection)
+            // 
             this.bcr = this.selection.getRangeAt(0).getBoundingClientRect();
         }
         getOffset() {
@@ -95,7 +95,7 @@
             let option = '';
 
             this.panel = document.createElement("div");
-            console.log(this.dictionaries.dictionaries)
+
             this.dictionaries.dictionaries.forEach(function(dictionary) {
                 if (!dictionary.isHidden) {
                     option += `<option data-url="${dictionary.url}">${dictionary.title}</option>`
@@ -134,7 +134,7 @@
                     let selectedOption = selectedDictionary.options[selectedDictionary.selectedIndex];
                     let selectedOptionUrl = selectedOption.dataset.url;
                     let url;
-                    console.log(selectedOptionUrl)
+
                     let query = (this.panel.querySelector("#selection").innerHTML).toLocaleLowerCase();
                     url = this.createDictionaryUrlForIFrame(selectedOptionUrl, query);
                     this.iframe.src = url;
@@ -157,7 +157,7 @@
     let dictionary = new Dictionary();
 
     await dictionary.getDictionariesFromLocalStorage();
-    // console.log(dictionary.dictionaries);
+    // 
     document.body.onmouseup = (e) => {
 
         // document.addEventListener("keydown", event => {
@@ -165,7 +165,7 @@
         //     return;
         //   }
         //   if (event.code == 'Escape') {
-        //     console.log(panel);
+        //     
         //     if (panel) {
         //       body.removeChild(panel) && (panel = null);
         //       return;
@@ -174,12 +174,12 @@
         // });
 
         // if (panel) {
-        //   console.log(panel)
+        //   
         //   let select = panel.querySelector("select");
-        //   // console.log(longman)
+        //   // 
         //   select.addEventListener("change", function(e) {
         //     let selectedOption = select.options[select.selectedIndex].dataset.url;
-        //     // console.log("Slected Options", selectedOption)
+        //     // 
         //     let slection = panel.querySelector("#selection").innerHTML;
         //     // alert
         //     iframe.src = `https://www.ldoceonline.com/dictionary/${slection}`;
