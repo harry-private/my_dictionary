@@ -216,7 +216,7 @@ function templateForDictionary({
     return `
     <div ${isGoogleTranslate ? 'id="google-translate"' : ''} class="dictionary" style="background: #eee; margin-bottom: 15px; padding: 10px">
     <div class="flex-container nowrap" style="justify-content: space-between">
-      <div class="column">${title}</div>
+      <div class="column">${sanitize(title)}</div>
       <div class="column" style="text-align: right">
       <span class="dictionary-edit" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Edit the dictionary"><strong>&#x1F589;</strong></span>
       <span class="dictionary-hide" style="font-size: 25px; ${(isHidden ? 'text-decoration: line-through;': '')} cursor: pointer; margin-right: 10px" title="Hide the dictionary"><strong>&#128065;</strong></span>
@@ -230,7 +230,7 @@ function templateForDictionary({
     <input type="text" class="dictionary-title" value="${title}" ${(preInstalled ? "disabled" : '')}> <br><br>
     <input type="hidden" class="dictionary-id" value="${id}" ${(preInstalled ? "disabled" : '')}>
     <label><strong>URL </strong></label><br> 
-    <input type="text" class="dictionary-url" value="${url}" ${(preInstalled ? "disabled" : '')}> <br><br>
+    <input type="text" class="dictionary-url" value="${url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}" ${(preInstalled ? "disabled" : '')}> <br><br>
     <input type="hidden" class="dictionary-preinstalled" value="${preInstalled}">
     <input type="hidden" class="dictionary-ishidden" value="${isHidden}">
     ${( preInstalled ? fromTo + '<br><br>' : '' )}
@@ -336,4 +336,18 @@ function changeUrlOfPreIntalledDictionaries() {
 
 function getSelectedOption(e) {
     return e.options[e.selectedIndex].value
+}
+
+
+function sanitize(string) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        "/": '&#x2F;',
+    };
+    const reg = /[&<>"'/]/ig;
+    return string.replace(reg, (match) => (map[match]));
 }

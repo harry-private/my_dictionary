@@ -1,8 +1,14 @@
 {
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "isitharry@gmail.com",
+      "strict_min_version": "65.0"
+    }
+  },
   "manifest_version": 2,
   "name": "My Dictionary",
   "description": "Multiple dictionary",
-  "version": "1.3.2",
+  "version": "1.0.0",
   "permissions": [
     "storage",
     "tabs",
@@ -44,7 +50,7 @@
         "<all_urls>"
       ],
       "js": [
-        "index_iframe_test.js"
+        "index.js"
       ],
       "css": [
         "index.css"
