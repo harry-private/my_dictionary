@@ -40,16 +40,18 @@
     color: #2c2d2b;
     position: sticky;
     width: 100%;
-    height: 36px;
-    background: #efefef
+    height: 30px;
+    background: #efefef;
+    border: none;
+    padding: 0 0 0 5px;
 }
 
 .my-dictionary-iframe {
 
     background: #efefef;
     width: 100%;
-    height: 92vh;
-    border: none
+    height: 87vh;
+    border: none;
 }
 
 .create-fixed-postion-element {
@@ -63,4 +65,12 @@
     z-index: 999999998;
     opacity: 0.5;
 
+}
+
+.query-input {
+    margin: 0px;
+    width: 100%;
+    height: 30px;
+    border: none;
+    padding: 0 0 0 5px;
 }

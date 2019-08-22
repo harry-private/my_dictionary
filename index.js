@@ -107,12 +107,12 @@
 
             this.panel.insertAdjacentHTML("afterbegin", `
           <select class="select-dictionary">${option}</select>
-          <span id="selection" style="display:none">${this.selectedText}</span>`);
+          <input class="query-input" value="${this.selectedText.toLowerCase().trim()}">`);
             this.panel.className = "my-dictionary-panel";
             this.fixedPostionElement.style.display = 'block'
             this.body.appendChild(this.panel);
         }
-        createIFrame(newUrl) {
+        createIFrame() {
 
             // Avoid recursive frame insertion...
             // let extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
@@ -129,7 +129,6 @@
             this.iframe = document.createElement('iframe');
             this.iframe.className = 'my-dictionary-iframe'
 
-            if (newUrl) { url = newUrl; }
 
             this.iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + encodeURIComponent(url));
             this.panel.appendChild(this.iframe);
@@ -139,29 +138,60 @@
         changeDictionary() {
             if (this.panel) {
                 let selectedDictionary = this.panel.querySelector('.select-dictionary');
+                let queryInput = this.panel.querySelector('.query-input');
+
                 selectedDictionary.addEventListener("change", () => {
-                    document.querySelector('.my-dictionary-panel').querySelector('iframe').remove();
+                    let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
 
                     let selectedOption = selectedDictionary.options[selectedDictionary.selectedIndex];
                     let selectedOptionUrl = selectedOption.dataset.url;
                     let url;
-                    let query = (this.panel.querySelector("#selection").innerText).toLocaleLowerCase();
+                    let query = queryInput.value.toLocaleLowerCase().trim();
+
                     url = this.createDictionaryUrlForIFrame(selectedOptionUrl, query);
-                    // this.iframe.src = url;
-                    this.createIFrame(url)
+                    iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + encodeURIComponent(url));
                 });
             }
         }
 
 
+        changeDictionaryQuery() {
+            if (this.panel) {
+                let selectedDictionary = this.panel.querySelector('.select-dictionary');
+                let queryInput = this.panel.querySelector('.query-input');
+
+                function delay(fn, ms) {
+                    let timer = 0
+                    return function(...args) {
+                        clearTimeout(timer)
+                        timer = setTimeout(fn.bind(this, ...args), ms || 0)
+                    }
+                }
+                queryInput.addEventListener("keyup", delay((e) => {
+                    let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
+
+                    let selectedOption = selectedDictionary.options[selectedDictionary.selectedIndex];
+                    let selectedOptionUrl = selectedOption.dataset.url;
+                    let url;
+                    let query = queryInput.value.toLocaleLowerCase().trim();
+                    if (query.trim() != "") {
+                        url = this.createDictionaryUrlForIFrame(selectedOptionUrl, query);
+                        iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + encodeURIComponent(url));
+                    }
+                }, 1500));
+            }
+        }
 
         createDictionaryUrlForIFrame(url, query) {
             if ((url).includes("%s")) {
                 return url.replace("%s", query);
             } else {
-                return `${url}/${query}`;
+                return `${url}/?${query}`;
             }
         }
+
+
+
     }
 
 
@@ -198,6 +228,7 @@
                 dictionary.createPanel(e);
 
                 dictionary.createIFrame();
+                dictionary.changeDictionaryQuery();
             }
             // body.appendChild(cambridgeEle) && (isAdded = true)
             // myPanel = document.body.querySelector('.dictionary-')
@@ -206,4 +237,5 @@
 
         })
     }
+
 })()
