@@ -107,7 +107,10 @@
 
             this.panel.insertAdjacentHTML("afterbegin", `
           <select class="select-dictionary">${option}</select>
-          <input class="query-input" value="${this.selectedText.toLowerCase().trim()}">`);
+          <div class="query-input-container">
+          <input class="query-input" value="${this.selectedText.toLowerCase().trim()}">
+          </div>`);
+
             this.panel.className = "my-dictionary-panel";
             this.fixedPostionElement.style.display = 'block'
             this.body.appendChild(this.panel);

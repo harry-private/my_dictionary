@@ -43,7 +43,7 @@
     height: 30px;
     background: #efefef;
     border: none;
-    padding: 0 0 0 5px;
+    padding: 0;
 }
 
 .my-dictionary-iframe {
@@ -67,10 +67,23 @@
 
 }
 
+.query-input-container {
+    background: #ffffff;
+    padding: 0 5px;
+    border-bottom: 1px solid #cccccc;
+}
+
 .query-input {
     margin: 0px;
     width: 100%;
     height: 30px;
     border: none;
-    padding: 0 0 0 5px;
+    padding: 0;
+    outline: none;
+    letter-spacing: 1px;
+
+}
+
+.query-input:focus {
+    font-weight: 600;
 }
