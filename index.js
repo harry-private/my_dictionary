@@ -162,6 +162,7 @@
             if (this.panel) {
                 let selectedDictionary = this.panel.querySelector('.select-dictionary');
                 let queryInput = this.panel.querySelector('.query-input');
+                let queryOld = queryInput.value.toLocaleLowerCase().trim();
 
                 function delay(fn, ms) {
                     let timer = 0
@@ -177,7 +178,8 @@
                     let selectedOptionUrl = selectedOption.dataset.url;
                     let url;
                     let query = queryInput.value.toLocaleLowerCase().trim();
-                    if (query.trim() != "") {
+                    if ((query != "") && (query != queryOld)) {
+                        queryOld = query;
                         url = this.createDictionaryUrlForIFrame(selectedOptionUrl, query);
                         iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + encodeURIComponent(url));
                     }

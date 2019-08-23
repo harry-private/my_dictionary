@@ -92,7 +92,7 @@
 }
 
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
 
     .my-dictionary-panel {
         width: 80%;
