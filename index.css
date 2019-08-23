@@ -26,7 +26,9 @@
 }
 
 .my-dictionary-panel {
-
+    font-size: 15px;
+    font-weight: normal;
+    letter-spacing: normal;
     max-width: 450px;
     height: 108vh;
     z-index: 999999999;
