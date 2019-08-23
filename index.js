@@ -5,7 +5,6 @@
     class Dictionary {
         constructor() {
             this.dictionaries = {};
-            this.webSiteUrl = `https://translate.google.co.in/#view=home&op=translate&sl=auto&tl=hi&text=`;
             this.panelWidth = 450;
             this.panelHeight = 300;
             this.body = document.body;
@@ -107,8 +106,8 @@
 
             this.panel.insertAdjacentHTML("afterbegin", `
           <select class="select-dictionary">${option}</select>
-          <div class="query-input-container">
-          <input class="query-input" value="${this.selectedText.toLowerCase().trim()}">
+          <div class="my-dictionary-query-input-container">
+          <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
           </div>`);
 
             this.panel.className = "my-dictionary-panel";
@@ -117,9 +116,6 @@
         }
         createIFrame() {
 
-            // Avoid recursive frame insertion...
-            // let extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
-            // if (!location.ancestorOrigins.contains(extensionOrigin)) {
             let url;
             let firstUnhiddenDictionary;
             // get the first unhidden dictionary
@@ -132,16 +128,14 @@
             this.iframe = document.createElement('iframe');
             this.iframe.className = 'my-dictionary-iframe'
 
-
             this.iframe.src = chrome.runtime.getURL('iframe/iframe.html?url=' + encodeURIComponent(url));
             this.panel.appendChild(this.iframe);
-            // }
         }
 
         changeDictionary() {
             if (this.panel) {
                 let selectedDictionary = this.panel.querySelector('.select-dictionary');
-                let queryInput = this.panel.querySelector('.query-input');
+                let queryInput = this.panel.querySelector('.my-dictionary-query-input');
 
                 selectedDictionary.addEventListener("change", () => {
                     let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
@@ -161,7 +155,7 @@
         changeDictionaryQuery() {
             if (this.panel) {
                 let selectedDictionary = this.panel.querySelector('.select-dictionary');
-                let queryInput = this.panel.querySelector('.query-input');
+                let queryInput = this.panel.querySelector('.my-dictionary-query-input');
                 let queryOld = queryInput.value.toLocaleLowerCase().trim();
 
                 function delay(fn, ms) {
@@ -235,11 +229,6 @@
                 dictionary.createIFrame();
                 dictionary.changeDictionaryQuery();
             }
-            // body.appendChild(cambridgeEle) && (isAdded = true)
-            // myPanel = document.body.querySelector('.dictionary-')
-
-
-
         })
     }
 

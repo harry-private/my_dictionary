@@ -63,20 +63,20 @@
     top: 0;
     background-color: #000;
     position: fixed;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     z-index: 999999998;
     opacity: 0.5;
 
 }
 
-.query-input-container {
+.my-dictionary-query-input-container {
     background: #ffffff;
     padding: 0 5px;
     border-bottom: 1px solid #cccccc;
 }
 
-.query-input {
+.my-dictionary-query-input {
     margin: 0px;
     width: 100%;
     height: 30px;
@@ -87,7 +87,7 @@
 
 }
 
-.query-input:focus {
+.my-dictionary-query-input:focus {
     font-weight: 600;
 }
 
