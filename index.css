@@ -29,7 +29,8 @@
     font-size: 15px;
     font-weight: normal;
     letter-spacing: normal;
-    max-width: 450px;
+    /* max-width: 450px; */
+    width: 50%;
     height: 108vh;
     z-index: 999999999;
     position: fixed;
@@ -88,4 +89,12 @@
 
 .query-input:focus {
     font-weight: 600;
+}
+
+
+@media (max-width: 576px) {
+
+    .my-dictionary-panel {
+        width: 80%;
+    }
 }

@@ -127,7 +127,7 @@
                 if (!dictionary.isHidden) { firstUnhiddenDictionary = dictionary; return dictionary; }
             })
             let firstUnhiddenDictionaryUrl = firstUnhiddenDictionary.url
-            url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.toLocaleLowerCase())
+            url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
 
             this.iframe = document.createElement('iframe');
             this.iframe.className = 'my-dictionary-iframe'
