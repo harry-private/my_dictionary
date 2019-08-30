@@ -4,7 +4,7 @@ UIsaveSettings = document.querySelector("#save-settings");
 
 
 chrome.storage.sync.get(['dictionaries'], result => {
-    console.log(result)
+    // console.log(result)
     createDictionariesSettingsLayout(result);
     addNewDictionary();
     sortDictionaries();
@@ -152,7 +152,7 @@ function addNewDictionary() {
         }
 
         if (!isObjEmpty(error)) {
-            console.log(error)
+            // console.log(error)
 
         }
 

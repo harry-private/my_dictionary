@@ -1,8 +1,14 @@
 {
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{81fad042-d4c7-478b-853c-ecc21537cae1}",
+      "strict_min_version": "65.0"
+    }
+  },
   "manifest_version": 2,
   "name": "My Dictionary",
   "description": "Get definition or translation of the selected word(s) in popup (multiple choices)",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "permissions": [
     "storage",
     "tabs",

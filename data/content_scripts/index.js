@@ -97,7 +97,7 @@
             let option = '';
 
             this.panel = document.createElement("div");
-            console.log(this.dictionaries.dictionaries)
+            // console.log(this.dictionaries.dictionaries)
             this.dictionaries.dictionaries.forEach(function(dictionary) {
                 if (!dictionary.isHidden) {
                     option += `<option data-url="${dictionary.url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}">${dictionary.title}</option>`
