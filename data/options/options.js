@@ -211,13 +211,13 @@ function templateForDictionary({
 
     // alert(('_' + Math.random().toString(36).substr(2, 9)))
     return `
-    <div ${isGoogleTranslate ? 'id="google-translate"' : ''} class="dictionary" style="background: #eee; margin-bottom: 15px; padding: 10px">
+    <div ${isGoogleTranslate ? 'id="google-translate"' : ''} class="dictionary" style="">
     <div class="flex-container nowrap" style="justify-content: space-between">
       <div class="column">${sanitize(title)}</div>
       <div class="column" style="text-align: right">
       <span class="dictionary-edit" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Edit the dictionary"><strong>&#x1F589;</strong></span>
       <span class="dictionary-hide" style="font-size: 25px; ${(isHidden ? 'text-decoration: line-through;': '')} cursor: pointer; margin-right: 10px" title="Hide the dictionary"><strong>&#128065;</strong></span>
-      ${(preInstalled ? '' : '<span class="dictionary-remove" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Remove the dictionary"><strong>&#x274C;</strong></span>')}
+      ${(preInstalled ? '' : '<span class="dictionary-remove" style="font-size: 25px; cursor: pointer; margin-right: 10px; color: red;" title="Remove the dictionary"><strong>&#128473;</strong></span>')}
       <span class="dictionary-drag" style="font-size: 25px; cursor: grab" title="Sort by draging and droping"><strong>&#x2630</strong></span>
       </div>
     </div>
@@ -231,8 +231,7 @@ function templateForDictionary({
     <input type="hidden" class="dictionary-preinstalled" value="${preInstalled}">
     <input type="hidden" class="dictionary-ishidden" value="${isHidden}">
     ${( preInstalled ? fromTo + '<br><br>' : '' )}
-    <button class="dictionary-done">Done</button>
-    <hr><br>
+    <button class="dictionary-done">Done</button><br>
     </div>
     </div>`;
 }

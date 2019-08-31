@@ -2,123 +2,175 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Options</title>
-  <style>
-    html,
-    body {
-      line-height: 1.6;
-      font-size: 15px;
-      /* min-width: 450px; */
-      /* max-height: 97.2vh;  */
-      overflow: auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Options</title>
+    <style>
+        html,
+        body {
+            line-height: 1.6;
+            font-size: 15px;
+            /* min-width: 450px; */
+            /* max-height: 97.2vh;  */
+            overflow: auto;
+            background: #eeeeee;
+        }
 
-    .flex-container {
-      padding: 0;
-      margin: 0;
-      /* list-style: none; */
-      /* border: 1px solid silver; */
-      -ms-box-orient: horizontal;
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -moz-flex;
-      display: -webkit-flex;
-      display: flex;
-    }
+        input {
+            outline: none;
+            border: none;
+            border-bottom: 2px solid #aba8a8;
+        }
 
-    .nowrap {
-      -webkit-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-    }
+        input:focus {
+            border-bottom-color: red;
+        }
 
-    .column {
-      flex: 50%;
-      /* padding: 10px;
+        .flex-container {
+            padding: 0;
+            margin: 0;
+            /* list-style: none; */
+            /* border: 1px solid silver; */
+            -ms-box-orient: horizontal;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -moz-flex;
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        .nowrap {
+            -webkit-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+        }
+
+        .column {
+            flex: 50%;
+            /* padding: 10px;
       margin: 15px; */
-    }
+        }
 
-    .flash-messages {
-      position: fixed;
-      /* top: 5px; */
-      left: 50%;
-      display: none;
-      background: rgb(6, 178, 184);
-      padding: 15px;
-      border-radius: 5px
-    }
+        .flash-messages {
+            position: fixed;
+            /* top: 5px; */
+            left: 40%;
+            display: none;
+            background: rgb(6, 178, 184);
+            padding: 15px;
+            border-radius: 5px
+        }
 
-    button {
-      background-color: #4CAF50;
-      /* Green */
-      border: none;
-      color: white;
-      padding: 10px 10px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-    }
+        button {
+            background-color: red;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
 
-    input[type=text] {
-      width: 100%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      box-sizing: border-box;
-    }
+        input[type=text] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
 
-    select {
-      width: 100%;
-      padding: 16px 20px;
-      /* border: none; */
-      border-radius: 4px;
-      /* background-color: #f1f1f1; */
-    }
-  </style>
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            -webkit-box-shadow: none;
+            border-bottom: 2px solid #aba8a8;
+            outline: none;
+        }
+
+        select:focus {
+            border-bottom-color: red;
+        }
+
+        .main-settings {
+            width: 450px;
+            margin: 0 auto;
+            background: #fff;
+        }
+
+        #dictionaries-settings .dictionary {
+            padding: 5px;
+        }
+
+        #dictionaries-settings .dictionary .dictionary-edited {
+            background: #ebebe4;
+            padding: 15px;
+        }
+
+        .settings-page-link {
+            font-size: 22px;
+            font-weight: 600;
+            text-decoration: none;
+            background:#ccc;
+            padding: 8px;
+            display: inline-block;
+            border-radius: 15px;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+        .settings-page-link:hover{
+          background: red;
+        }
+    </style>
 </head>
 
 <body style="min-width: 450px; min-height: 92vh;">
-  <div class="flash-messages"></div>
-  <h2>Settings</h2>
-  <br>
+    <div class="flash-messages"></div>
+    <a href="options.html" target="_blank" class="settings-page-link">Settings</a>
+    <br>
 
-  <h2 style="padding: 5px; background: #4CAF50">Add New Dictionary</h2>
- 
-  <div class="add-new-dictionary">
+    <div class="main-settings">
 
-      <label><strong>Title</strong></label><br>
-      <input type="text" class="dictionary-title"><br><br>
-      <label><strong>Url</strong> (<span>Add <strong>%s</strong> where the query will go</span>)</label><br>
-      <input type="text" class="dictionary-url">
-    <button id="add-new-dictionary-btn" style="height: 48px; margin-top: 28px;margin-left:3px">Add Dictionary</button>
+        <div class="add-new-dictionary" style="border-left: 5px solid red; padding: 15px">
+            <div style="padding: 5px; margin-bottom: 12px; font-size: 23px">Add New Dictionary</div>
 
-  </div>
+            <label><strong>Title</strong></label><br>
+            <input type="text" class="dictionary-title"><br><br>
+            <label><strong>Url</strong> (<span>Add <strong>%s</strong> where the query will go</span>)</label><br>
+            <input type="text" class="dictionary-url">
+            <button id="add-new-dictionary-btn" style="height: 48px; margin-top: 28px;margin-left:3px">Add Dictionary</button>
 
-  <br>
-  <hr>
+        </div>
 
-  <h2 style="padding: 5px; background: #4CAF50">Added Dictionaries</h2>
-  <div class="flex-container nowrap" style="border-bottom: 5px solid red;">
-    <div class="column" style="border:1px solid #ccc;">
-      <h3>Dictionaries</h3>
-      <span style="font-size: 12px; font-style: unset">* First dictionary in the list will be the default dictionary</span><br>
+        <br>
+        <br>
+        <div class="flex-container nowrap" style="border-left: 5px solid red; padding: 15px">
+            <div class="column">
+                <div style="padding: 5px; margin-bottom: 12px; font-size: 23px">Added Dictionaries</div>
+                <h3>Dictionaries</h3>
+                <span style="font-size: 12px; font-style: unset"><strong>* First dictionary in the list will be the default dictionary</strong></span><br><br>
 
-      <div id="dictionaries-settings" class=""></div>
+                <div id="dictionaries-settings" class=""></div>
+            </div>
+        </div>
+
+
+
     </div>
-  </div>
 
-  <br>
-  <hr>
-  <h2>Help</h2>
-  <div class="help">
-  </div>
-  <div id="save-settings" style="position: fixed; z-index: 100; bottom: 16px; right:16px"><button>Save Settings</button></div>
-  <script src="/data/external_libs/sortable.min.js"></script>
-  <script src="/data/internal_libs/dictionaries_data.js"></script>
-  <script src="options.js"></script>
+    <br>
+    <!--     <hr>
+    <h2>Help</h2>
+    <div class="help"></div> -->
+    <div id="save-settings" style="position: fixed; z-index: 100; bottom: 16px; right:16px"><button>Save Settings</button></div>
+    <script src="/data/external_libs/sortable.min.js"></script>
+    <script src="/data/internal_libs/dictionaries_data.js"></script>
+    <script src="options.js"></script>
 </body>
 
 </html>

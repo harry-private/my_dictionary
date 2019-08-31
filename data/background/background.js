@@ -44,7 +44,7 @@ chrome.runtime.onInstalled.addListener(function() {
     // alert(googelTraslateLanguages)
     // alert("Fist time")
     chrome.storage.sync.get(['dictionaries'], result => {
-        console.log(result)
+        // console.log(result)
         if (!result.dictionaries) {
             // create dictionary if its first time
             firsTime();
