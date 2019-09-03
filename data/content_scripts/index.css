@@ -6,15 +6,15 @@
     z-index: 999999;
     position: absolute;
     padding: 3px;
-    border: 1.4px solid rgb(220, 220, 220);
-    border-radius: 100%;
+    /* border: 1.4px solid rgb(220, 220, 220); */
+    /* border-radius: 100%; */
     border-image: initial;
 }
 
 .my-dictionary-popup:hover {
     background-color: rgb(248, 248, 248);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px;
-    border: 1px solid rgb(198, 198, 198);
+    /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px; */
+    /* border: 1px solid rgb(198, 198, 198); */
     border-image: initial;
 }
 
