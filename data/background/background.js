@@ -18,7 +18,7 @@ chrome.webRequest.onHeadersReceived.addListener(function(info) {
             (initiator == 'https://github.com') ||
             (info.type == 'sub_frame')
         ) {
-            console.log("Type Matched!");
+            // console.log("Type Matched!");
 
             var headers = info.responseHeaders;
             for (var i = headers.length - 1; i >= 0; --i) {

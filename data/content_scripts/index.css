@@ -5,9 +5,7 @@
     cursor: pointer;
     z-index: 999999;
     position: absolute;
-    padding: 3px;
-    /* border: 1.4px solid rgb(220, 220, 220); */
-    /* border-radius: 100%; */
+    padding: 0;
     border-image: initial;
 }
 
@@ -25,11 +23,33 @@
     width: 19px;
 }
 
+.my-dictionary-custom-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="rgba(3, 3, 3, 1)" x="0px" y="0px" width="8px" height="8px" viewBox="0 0 386.257 386.257" style="enable-background:new 0 0 386.257 386.257;" xml:space="preserve"><polygon points="0,96.879 193.129,289.379 386.257,96.879 "/></svg>');
+    background-position: calc(100% - 5px) center;
+    /* background-position: calc(100%) center; */
+    background-repeat: no-repeat;
+    padding: 0 0 0 5px;
+    outline: none !important;
+    margin: 0;
+    font-family: Verdana, sans-serif;
+    color: #000000;
+    height: 30px;
+    cursor: pointer;
+}
+
+.my-dictionary-popup-select {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAC4kAAAuJATfJy60AAAAHdElNRQfjBxYQBg2vm2+UAAABT0lEQVQ4y+XTv2pUQRQG8N+d3TWQSArFKESwSBdFLBbT5gUsop02PkGC5CGEpBMsrS0sAmJIa7o0CykEFcSgsEYSBUmRJdmbmRT3bnZzXSFb+zXDnHO+82fON4yIrDyDOXNqQmmNkoAok8nse+s31EvCghW/3PbVrgy3XNcSNH3TlplxzzOxV6fhnRdu2vZYcEmwbNOkKS1PBcGiLZf7FRomfXQg6YqOkYs6UmnhUCzarw9Mkw3MBHdNnJs3VQnnnbPeGDNRhPVRNxw/JGuOPbF3McK6D3ZEr3y/GKHjE/hSdYRRN/2fE07kkpN/xMVSOmd7SJpy18xrqFWCk6553SJZoaBxG+7YEaSqdiRXTfvsudeDFWpeWv0rN+SWPPBIu7gWhK4/rsgdDSUcyfp/rSfqh1b91KmIvBj3hlnblr0fbGlN232NoS+URHotjYxT6ClcrRIiuNgAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMDctMjJUMTY6MDY6MTMrMDA6MDAABncPAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTA3LTIyVDE2OjA2OjEzKzAwOjAwcVvPswAAAABJRU5ErkJggg==) !important;
+    width: 182px !important;
+    font-size: 15px !important;
+    border: 1.5px solid #ccc !important;
+}
+
 .my-dictionary-panel {
     font-size: 15px;
     font-weight: normal;
     letter-spacing: normal;
-    /* max-width: 450px; */
     width: 50%;
     height: 108vh;
     z-index: 999999999;
@@ -37,16 +57,16 @@
     top: 0px;
     left: 50%;
     transform: translate(-50%);
+    background: #ffffff;
 }
 
-.my-dictionary-panel .select-dictionary {
-    color: #2c2d2b;
+.my-dictionary-panel .my-dictionary-panel-select {
+
+    font-size: 15px !important;
+    border: none !important;
     position: sticky;
     width: 100%;
     height: 30px;
-    background: #efefef;
-    border: none;
-    padding: 0;
 }
 
 .my-dictionary-iframe {
@@ -81,7 +101,7 @@
     width: 100%;
     height: 30px;
     border: none;
-    padding: 0;
+    padding: 0 0 0 5px;
     outline: none;
     letter-spacing: 1px;
 

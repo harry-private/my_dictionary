@@ -9,23 +9,19 @@
             this.body = document.body;
             this.html = document.documentElement;
             this.popup = document.createElement('div');
-            this.popupIcon = document.createElement('div');
-            this.popupSelect = document.createElement('div');
+            // this.popupIcon = document.createElement('div');
+            this.popupSelect = document.createElement('select');
+            this.popup.classList.add('my-dictionary-popup');
+            this.popupSelect.classList.add('my-dictionary-popup-select');
+            this.popupSelect.classList.add('my-dictionary-custom-select');
             this.isAdded = false;
             this.iframe;
             this.panel;
             this.selectedText;
+            this.selectedDictionary;
             // appending "my-dictionary-" because StackOverflow has the popup class, so won't work there
-            this.popupIcon.classList.add('my-dictionary-popup-icon');
-            this.popup.classList.add('my-dictionary-popup');
-            this.popupSelect.insertAdjacentHTML('afterbegin', `<select class="my-dictionary-popup-select">
-              <option value="volvo" disabled selected>Choose</option>
-              <option value="saab">Saab</option>
-              <option value="mercedes">Mercedes</option>
-              <option value="audi">Audi</option>
-            </select>`);
-            // this.popupTest.style.cssText = '';
-            this.popup.appendChild(this.popupSelect);
+            // this.popupIcon.classList.add('my-dictionary-popup-icon');
+            // this.createPopup();
             // this.popup = this.poptest;
             this.createFixedPostionElement()
         }
@@ -38,6 +34,10 @@
                 })
             }
             this.dictionaries = await dictionariesPromise();
+        }
+        createPopup() {
+            this.popupSelect.innerHTML = `${(this.dictionariesOptionsForSelect())}`
+            this.popup.appendChild(this.popupSelect);
         }
         // this element will be used for black background
         createFixedPostionElement() {
@@ -86,6 +86,15 @@
             }
             return true;
         }
+        dictionariesOptionsForSelect() {
+            let options = '<option selected disabled>Choose Dictionary</option>';
+            this.dictionaries.dictionaries.forEach(function(dictionary) {
+                if (!dictionary.isHidden) {
+                    options += `<option data-url="${dictionary.url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}">${dictionary.title}</option>`
+                }
+            });
+            return options;
+        }
         showPopup(event) {
             if (Math.abs(event.clientY - this.bcr.top) > this.bcr.bottom - event.clientY) {
                 // icon will be shown on top
@@ -98,34 +107,36 @@
             }
         }
         createPanel(event) {
-            let option = '';
             this.panel = document.createElement("div");
             // 
-            this.dictionaries.dictionaries.forEach(function(dictionary) {
-                if (!dictionary.isHidden) {
-                    option += `<option data-url="${dictionary.url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}">${dictionary.title}</option>`
-                }
-            });
+            // this.dictionaries.dictionaries.forEach(function(dictionary) {
+            //     if (!dictionary.isHidden) {
+            //         option += `<option data-url="${dictionary.url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}">${dictionary.title}</option>`
+            //     }
+            // });
             this.panel.insertAdjacentHTML("afterbegin", `
-          <select class="select-dictionary">${option}</select>
+          <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
           <div class="my-dictionary-query-input-container">
           <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
           </div>`);
             this.panel.className = "my-dictionary-panel";
             this.fixedPostionElement.style.display = 'block'
-            this.panel.querySelector('.select-dictionary')
+            this.panel.querySelector('.my-dictionary-panel-select')
                 .addEventListener('change', this.changeDictionary())
             this.body.appendChild(this.panel);
         }
         createIFrame() {
+            this.selectedDictionary = this.popupSelect.options[this.popupSelect.selectedIndex];
+            let selectedDictionaryUrl = this.selectedDictionary.dataset.url;
             let url;
-            let firstUnhiddenDictionary;
-            // get the first unhidden dictionary
-            this.dictionaries.dictionaries.some((dictionary) => {
-                if (!dictionary.isHidden) { firstUnhiddenDictionary = dictionary; return dictionary; }
-            })
-            let firstUnhiddenDictionaryUrl = firstUnhiddenDictionary.url
-            url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
+            // let firstUnhiddenDictionary;
+            // // get the first unhidden dictionary
+            // this.dictionaries.dictionaries.some((dictionary) => {
+            //     if (!dictionary.isHidden) { firstUnhiddenDictionary = dictionary; return dictionary; }
+            // })
+            // let firstUnhiddenDictionaryUrl = firstUnhiddenDictionary.url
+            // url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
+            url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
             this.iframe = document.createElement('iframe');
             this.iframe.className = 'my-dictionary-iframe'
             this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
@@ -133,22 +144,22 @@
         }
         changeDictionary() {
             if (this.panel) {
-                let selectedDictionary = this.panel.querySelector('.select-dictionary');
+                let panelSelect = this.panel.querySelector('.my-dictionary-panel-select');
                 let queryInput = this.panel.querySelector('.my-dictionary-query-input');
-                selectedDictionary.addEventListener("change", () => {
+                panelSelect.addEventListener("change", () => {
                     let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
-                    let selectedOption = selectedDictionary.options[selectedDictionary.selectedIndex];
-                    let selectedOptionUrl = selectedOption.dataset.url;
+                    let selectedDictionary = panelSelect.options[panelSelect.selectedIndex];
+                    let selectedDictionaryUrl = selectedDictionary.dataset.url;
                     let url;
                     let query = queryInput.value.toLocaleLowerCase().trim();
-                    url = this.createDictionaryUrlForIFrame(selectedOptionUrl, query);
+                    url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
                     iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
                 });
             }
         }
         changeDictionaryQuery() {
             if (this.panel) {
-                let selectedDictionary = this.panel.querySelector('.select-dictionary');
+                let panelSelect = this.panel.querySelector('.my-dictionary-panel-select');
                 let queryInput = this.panel.querySelector('.my-dictionary-query-input');
                 let queryOld = queryInput.value.toLocaleLowerCase().trim();
 
@@ -161,13 +172,16 @@
                 }
                 queryInput.addEventListener("keyup", delay((e) => {
                     let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
-                    let selectedOption = selectedDictionary.options[selectedDictionary.selectedIndex];
-                    let selectedOptionUrl = selectedOption.dataset.url;
+                    let selectedDictionary = panelSelect.options[panelSelect.selectedIndex];
+                    let selectedDictionaryUrl = selectedDictionary.dataset.url;
                     let url;
+                    if (!selectedDictionaryUrl) {
+                        selectedDictionaryUrl = this.selectedDictionary.dataset.url;
+                    }
                     let query = queryInput.value.toLocaleLowerCase().trim();
                     if ((query != "") && (query != queryOld)) {
                         queryOld = query;
-                        url = this.createDictionaryUrlForIFrame(selectedOptionUrl, query);
+                        url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
                         iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
                     }
                 }, 1500));
@@ -202,6 +216,7 @@
                 return;
             }
             dictionary.getBCR();
+            dictionary.createPopup()
             dictionary.showPopup(e);
             dictionary.popupSelect.onchange = (evt) => {
                 dictionary.removePopup()
