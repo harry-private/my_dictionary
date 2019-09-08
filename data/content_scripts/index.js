@@ -210,6 +210,8 @@
         addEventListenerToPanelExtraOption() {
             let panelClose = this.panel.querySelector(".my-dictionary-panel-close");
             let panelMaximizeRestore = this.panel.querySelector(".my-dictionary-panel-maximize-restore");
+            let panelBack = this.panel.querySelector(".my-dictionary-panel-back");
+            let panelForward = this.panel.querySelector(".my-dictionary-panel-forward");
 
             panelClose.addEventListener('click', () => {
                 this.body.removeChild(this.panel) && (this.panel = null);
@@ -228,7 +230,16 @@
 
                 }
 
+            });
+            panelBack.addEventListener('click', () => {
+                history.back();
+                // console.log('this.iframe.contentWindow: ', this.iframe.contentWindow);
             })
+            panelForward.addEventListener('click', () => {
+                history.forward();
+                // console.log('this.iframe.contentWindow: ', this.iframe.contentWindow);
+            })
+
         }
     }
     let dictionary = new Dictionary();
