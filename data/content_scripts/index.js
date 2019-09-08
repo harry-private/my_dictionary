@@ -114,15 +114,27 @@
             //         option += `<option data-url="${dictionary.url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}">${dictionary.title}</option>`
             //     }
             // });
+
+            // overlap icon &#128471;
+
             this.panel.insertAdjacentHTML("afterbegin", `
-          <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
-          <div class="my-dictionary-query-input-container">
-          <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
+          <div class="my-dictionary-panel-extra-options">
+            <span class="my-dictionary-panel-back" title="Go back">&#129032;</span>
+            <span class="my-dictionary-panel-forward" title="Go forward">&#129034;</span>
+            <span class="my-dictionary-panel-maximize-restore" title="Maximize">&#128470;</span>
+            <span class="my-dictionary-panel-close" title="Close the panel">&#128473;</span>
+          </div>
+          <div class="panel-select-panel-input-conatiner">
+            <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
+            <div class="my-dictionary-query-input-container">
+              <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
+            </div>
           </div>`);
             this.panel.className = "my-dictionary-panel";
             this.fixedPostionElement.style.display = 'block'
             this.panel.querySelector('.my-dictionary-panel-select')
                 .addEventListener('change', this.changeDictionary())
+            this.addEventListenerToPanelExtraOption();
             this.body.appendChild(this.panel);
         }
         createIFrame() {
@@ -193,6 +205,30 @@
             } else {
                 return `${url}/?${query}`;
             }
+        }
+
+        addEventListenerToPanelExtraOption() {
+            let panelClose = this.panel.querySelector(".my-dictionary-panel-close");
+            let panelMaximizeRestore = this.panel.querySelector(".my-dictionary-panel-maximize-restore");
+
+            panelClose.addEventListener('click', () => {
+                this.body.removeChild(this.panel) && (this.panel = null);
+                this.fixedPostionElement.style.display = 'none';
+            });
+
+            panelMaximizeRestore.addEventListener('click', () => {
+
+                this.panel.classList.toggle('my-dictionary-panel-maximized');
+                if (this.panel.classList.contains('my-dictionary-panel-maximized')) {
+                    panelMaximizeRestore.innerHTML = '&#128471;';
+                    panelMaximizeRestore.setAttribute('title', 'Restore to default');
+                } else {
+                    panelMaximizeRestore.innerHTML = '&#128470;';
+                    panelMaximizeRestore.setAttribute('title', 'Maximize');
+
+                }
+
+            })
         }
     }
     let dictionary = new Dictionary();
