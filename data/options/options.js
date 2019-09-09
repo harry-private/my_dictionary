@@ -21,7 +21,7 @@ chrome.storage.sync.get(['dictionaries'], result => {
             dictionaries: dictionariesToStore,
         });
 
-        showFlashMessages(["settings Saved!"]);
+        showFlashMessages(["Settings Saved!"]);
     });
 
 });
@@ -174,7 +174,7 @@ function isObjEmpty(obj) {
     return (Object.entries(obj).length === 0 && obj.constructor === Object) ? true : false
 }
 
-function showFlashMessages(messages = [], BGColor = "rgb(6, 178, 184)") {
+function showFlashMessages(messages = [], BGColor = "rgb(34,187,51)") {
 
     UIflashMessages.style.backgroundColor = BGColor;
     UIflashMessages.style.display = 'block';
