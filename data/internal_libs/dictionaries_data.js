@@ -218,7 +218,7 @@ let dictionariesData = {
             if (fromTo == 'greek-english') { return `https://el.oxforddictionaries.com/translate/${fromTo}/%s` }
             if (fromTo == 'english-greek') { return `https://el.oxforddictionaries.com/translate/${fromTo}/%s` }
             if (fromTo == 'gu') { return `https://gu.oxforddictionaries.com/વ્યાખ્યા/%s` }
-            if (fromTo == 'hi') { return `https://hi.oxforddictionaries.com/defination/%s/?locale=en` }
+            if (fromTo == 'hi') { return `https://hi.oxforddictionaries.com/definition/%s/?locale=en` }
             if (fromTo == 'indonesian-english') { return `https://id.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
             if (fromTo == 'english-indonesian') { return `https://id.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
             if (fromTo == 'isixhosa-english') { return `https://xh.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
@@ -230,7 +230,7 @@ let dictionariesData = {
             if (fromTo == 'english-malay') { return `https://ms.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
             if (fromTo == 'northernsotho-english') { return `https://nso.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
             if (fromTo == 'english-northernsotho') { return `https://nso.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
-            if (fromTo == 'ro') { return `https://ro.oxforddictionaries.com/defination/%s/?locale=en` }
+            if (fromTo == 'ro') { return `https://ro.oxforddictionaries.com/definition/%s/?locale=en` }
             if (fromTo == 'english-romanian') { return `https://ro.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
             if (fromTo == 'setswana-english') { return `https:/tn.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
             if (fromTo == 'english-setswana') { return `https://tn.oxforddictionaries.com/translate/${fromTo}/%s/?locale=en` }
