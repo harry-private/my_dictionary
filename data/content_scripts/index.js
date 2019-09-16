@@ -17,6 +17,7 @@
             this.isAdded = false;
             this.iframe;
             this.panel;
+            this.panelMaximized = false;
             this.selectedText;
             this.selectedDictionary;
             // appending "my-dictionary-" because StackOverflow has the popup class, so won't work there
@@ -42,7 +43,7 @@
         // this element will be used for black background
         createFixedPostionElement() {
             this.fixedPostionElement = document.createElement('div');
-            this.fixedPostionElement.className = 'create-fixed-postion-element';
+            this.fixedPostionElement.classList.add('create-fixed-postion-element');
             this.body.appendChild(this.fixedPostionElement);
         }
         removePanelWhenClickedOutside(event) {
@@ -129,8 +130,11 @@
             <div class="my-dictionary-query-input-container">
               <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
             </div>
-          </div>`);
-            this.panel.className = "my-dictionary-panel";
+            </div>`);
+            this.panel.classList.add("my-dictionary-panel");
+            if (this.panelMaximized) {
+                this.panel.classList.add('my-dictionary-panel-maximized');
+            }
             this.fixedPostionElement.style.display = 'block'
             this.panel.querySelector('.my-dictionary-panel-select')
                 .addEventListener('change', this.changeDictionary())
@@ -150,7 +154,7 @@
             // url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
             url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
             this.iframe = document.createElement('iframe');
-            this.iframe.className = 'my-dictionary-iframe'
+            this.iframe.classList.add('my-dictionary-iframe');
             this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
             this.panel.appendChild(this.iframe);
         }
@@ -222,9 +226,11 @@
 
                 this.panel.classList.toggle('my-dictionary-panel-maximized');
                 if (this.panel.classList.contains('my-dictionary-panel-maximized')) {
+                    this.panelMaximized = true;
                     panelMaximizeRestore.innerHTML = '&#128471;';
                     panelMaximizeRestore.setAttribute('title', 'Restore to default');
                 } else {
+                    this.panelMaximized = false;
                     panelMaximizeRestore.innerHTML = '&#128470;';
                     panelMaximizeRestore.setAttribute('title', 'Maximize');
 
