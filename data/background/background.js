@@ -49,12 +49,21 @@ chrome.webRequest.onHeadersReceived.addListener(function(info) {
 chrome.runtime.onInstalled.addListener(function() {
     // alert(googelTraslateLanguages)
     // alert("Fist time")
-    chrome.storage.sync.get(['dictionaries'], result => {
+    chrome.storage.sync.get(['dictionaries, triggerKey'], result => {
         // console.log(result)
         if (!result.dictionaries) {
             // create dictionary if its first time
             firsTime();
             // alert("Dictionaries added")
+        }
+
+
+        if (!result.triggerKey) {
+            // if there is no trigger key in the storage I can set here
+            // because when this extension gets updated 
+            // users may not have that in there storage
+            // because initially there was no such key
+            setTriggerKeyFirstTime();
         }
     });
 });
@@ -99,6 +108,14 @@ function firsTime() {
             },
 
         ],
-        dictionariesHidden: []
+        dictionariesHidden: [],
+        triggerKey: "none"
+    });
+}
+
+function setTriggerKeyFirstTime() {
+
+    chrome.storage.sync.set({
+        triggerKey: "none"
     });
 }

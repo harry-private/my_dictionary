@@ -29,7 +29,7 @@
         async getDictionariesFromLocalStorage() {
             let dictionariesPromise = async () => {
                 return new Promise(resolve => {
-                    chrome.storage.sync.get(['dictionaries'], result => {
+                    chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
                         resolve(result)
                     })
                 })
@@ -40,6 +40,18 @@
             this.popupSelect.innerHTML = `${(this.dictionariesOptionsForSelect())}`
             this.popup.appendChild(this.popupSelect);
         }
+
+        isTriggerKeyPressed(mouseupEvent) {
+            let triggerKeysNotNone = ["ctrlKey", "shiftKey", "altKey"];
+            // storage triggerKey
+            let isStorageTriggerKeyNotNone = (triggerKeysNotNone.indexOf(this.dictionaries.triggerKey) > -1);
+            // check if set triggerKey is not "none"
+            if (isStorageTriggerKeyNotNone) {
+                return (mouseupEvent[this.dictionaries.triggerKey]) ? true : false;
+            } else { return true; }
+        }
+
+
         // this element will be used for black background
         createFixedPostionElement() {
             this.fixedPostionElement = document.createElement('div');
@@ -250,12 +262,15 @@
     }
     let dictionary = new Dictionary();
     await dictionary.getDictionariesFromLocalStorage();
-    document.body.onmouseup = (e) => {
+    document.body.onmouseup = (mouseupEvent) => {
+
+        // console.log(mouseupEvent)
         // console.log(dictionary.getSelection().toString());
-        if (e.target.classList.contains('my-dictionary-popup-select') ||
-            e.target.closest(".my-dictionary-popup-select") ||
-            e.target.closest(".my-dictionary-panel")) { return; }
-        if (dictionary.removePanelWhenClickedOutside(e)) {
+
+        if (mouseupEvent.target.classList.contains('my-dictionary-popup-select') ||
+            mouseupEvent.target.closest(".my-dictionary-popup-select") ||
+            mouseupEvent.target.closest(".my-dictionary-panel")) { return; }
+        if (dictionary.removePanelWhenClickedOutside(mouseupEvent)) {
             return;
         }
         setTimeout(() => {
@@ -264,18 +279,18 @@
             dictionary.getRelative();
             dictionary.getOffset();
             dictionary.removePopup();
+            // if triggerKey is not pressed don't excute rest of the code
+            if (!dictionary.isTriggerKeyPressed(mouseupEvent)) { return; }
             // if no text is selected or clicked element is popup, don't execute the rest of the code
-            if (!dictionary.isSelectedText(e)) {
-                return;
-            }
+            if (!dictionary.isSelectedText(mouseupEvent)) { return; }
             dictionary.getBCR();
             dictionary.createPopup()
-            dictionary.showPopup(e);
+            dictionary.showPopup(mouseupEvent);
             dictionary.popupSelect.onchange = (evt) => {
                 dictionary.removePopup()
                 evt.stopPropagation();
                 evt.preventDefault();
-                dictionary.createPanel(e);
+                dictionary.createPanel(mouseupEvent);
                 dictionary.createIFrame();
                 dictionary.changeDictionaryQuery();
             }

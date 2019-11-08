@@ -1,24 +1,25 @@
 UIflashMessages = document.querySelector('.flash-messages');
 UIdictionriesSettings = document.querySelector("#dictionaries-settings");
 UIsaveSettings = document.querySelector("#save-settings");
+let UItriggerKey = document.querySelector("#trigger-key");
 
 
-chrome.storage.sync.get(['dictionaries'], result => {
-    // console.log(result)
+chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
+    console.log('result: ', result);
     createDictionariesSettingsLayout(result);
     addNewDictionary();
     sortDictionaries();
-    addEventListenerToDictionarySideoptions()
+    addEventListenerToDictionarySideoptions();
 
     UIsaveSettings.addEventListener("click", function() {
 
+        let triggerKeyToStore = changeTriggerKey(result);
         let UIdictionaries = UIdictionriesSettings.querySelectorAll(".dictionary");
-
         let dictionariesToStore = getDictionariesFromInputs(UIdictionaries);
-
         // save the dictionaries to the local storage
         chrome.storage.sync.set({
             dictionaries: dictionariesToStore,
+            triggerKey: triggerKeyToStore
         });
 
         showFlashMessages(["Settings Saved!"]);
@@ -29,6 +30,7 @@ chrome.storage.sync.get(['dictionaries'], result => {
 function createDictionariesSettingsLayout(result) {
 
     let dictionaries = result.dictionaries;
+    let triggerKey = result.triggerKey;
 
     dictionaries.forEach(function(dictionary) {
         let fromTo;
@@ -71,8 +73,9 @@ function createDictionariesSettingsLayout(result) {
         })
         UIdictionriesSettings.insertAdjacentHTML('beforeend', template);
     });
-
     changeUrlOfPreIntalledDictionaries();
+    // set default selected option the gotten from storage
+    UItriggerKey.value = triggerKey;
 }
 
 function getDictionariesFromInputs(dictionaries) {
@@ -159,6 +162,16 @@ function addNewDictionary() {
     })
 }
 
+
+function changeTriggerKey(result) {
+    let allowedTriggerKeys = ["none", "ctrlKey", "shiftKey", "altKey"];
+    let UItriggerKeySelected = getSelectedOption(UItriggerKey);
+    const isAllowedTriggerKey = (allowedTriggerKeys.indexOf(UItriggerKeySelected) > -1);
+    // if the selected option is not allowed, or the user has edit the code
+    // no need to show the error message, and set the trigger key to "none"
+    return (isAllowedTriggerKey ? UItriggerKeySelected : "none");
+
+}
 
 
 function isValidURL(string) {
