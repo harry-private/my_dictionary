@@ -5,7 +5,7 @@ let UItriggerKey = document.querySelector("#trigger-key");
 
 
 chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
-    console.log('result: ', result);
+    // console.log('result: ', result);
     createDictionariesSettingsLayout(result);
     addNewDictionary();
     sortDictionaries();
@@ -228,10 +228,10 @@ function templateForDictionary({
     <div class="flex-container nowrap" style="justify-content: space-between">
       <div class="column">${sanitize(title)}</div>
       <div class="column" style="text-align: right">
-      <span class="dictionary-edit" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Edit the dictionary"><strong>&#x1F589;</strong></span>
-      <span class="dictionary-hide" style="font-size: 25px; ${(isHidden ? 'text-decoration: line-through;': '')} cursor: pointer; margin-right: 10px" title="Hide the dictionary"><strong>&#128065;</strong></span>
-      ${(preInstalled ? '' : '<span class="dictionary-remove" style="font-size: 25px; cursor: pointer; margin-right: 10px; color: red;" title="Remove the dictionary"><strong>&#128473;</strong></span>')}
-      <span class="dictionary-drag" style="font-size: 25px; cursor: grab" title="Sort by draging and droping"><strong>&#x2630</strong></span>
+      <span class="dictionary-edit" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Edit the dictionary"><strong><i class="material-icons">edit</i></strong></span>
+      <span class="dictionary-hide" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Hide the dictionary"><strong><i class="material-icons dictionary-hide-icon">${(isHidden ? 'visibility_off': 'visibility')}</i></strong></span>
+      ${(preInstalled ? '' : '<span class="dictionary-remove" style="font-size: 25px; cursor: pointer; margin-right: 10px;" title="Remove the dictionary"><strong><i class="material-icons">delete_forever</i></strong></span>')}
+      <span class="dictionary-drag" style="font-size: 25px; cursor: grab" title="Sort by draging and droping"><strong><i class="material-icons">menu</i></strong></span>
       </div>
     </div>
     <div class="dictionary-edited" style="display:none">
@@ -266,6 +266,7 @@ function eventListenerForSideOptions() {
     return function(dictionary) {
         let UIdictionaryEdit = dictionary.querySelector(".dictionary-edit");
         let UIdictionaryHide = dictionary.querySelector(".dictionary-hide");
+        let UIdictionaryHideIcon = UIdictionaryHide.querySelector('.dictionary-hide-icon');
         let UIdictionaryRemove = dictionary.querySelector(".dictionary-remove");
         let UIdictionaryDone = dictionary.querySelector(".dictionary-done");
 
@@ -283,10 +284,12 @@ function eventListenerForSideOptions() {
 
             if (UIdictionaryIshidden.value === "true") {
                 UIdictionaryIshidden.value = "false"
-                UIdictionaryHide.style.textDecoration = '';
+                UIdictionaryHideIcon.innerText = "visibility";
+                // UIdictionaryHide.style.textDecoration = '';
             } else {
                 UIdictionaryIshidden.value = "true"
-                UIdictionaryHide.style.textDecoration = 'line-through';
+                // UIdictionaryHide.style.textDecoration = 'line-through';
+                UIdictionaryHideIcon.innerText = "visibility_off";
 
             }
         });

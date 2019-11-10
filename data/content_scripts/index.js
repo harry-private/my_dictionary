@@ -131,11 +131,12 @@
             // overlap icon &#128471;
 
             this.panel.insertAdjacentHTML("afterbegin", `
+          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
           <div class="my-dictionary-panel-extra-options">
-            <span class="my-dictionary-panel-back" title="Go back">&#129032;</span>
-            <span class="my-dictionary-panel-forward" title="Go forward">&#129034;</span>
-            <span class="my-dictionary-panel-maximize-restore" title="Maximize">&#128470;</span>
-            <span class="my-dictionary-panel-close" title="Close the panel">&#128473;</span>
+            <span class="my-dictionary-panel-back" title="Go back"><i class="material-icons">arrow_back</i></span>
+            <span class="my-dictionary-panel-forward" title="Go forward"><i class="material-icons">arrow_forward</i></span>
+            <span class="my-dictionary-panel-maximize-restore" title="Maximize"><i class="material-icons my-dictionary-panel-maximize-restore-icon">fullscreen</i></span>
+            <span class="my-dictionary-panel-close" title="Close the panel"><i class="material-icons">clear</i></span>
           </div>
           <div class="panel-select-panel-input-conatiner">
             <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
@@ -226,6 +227,7 @@
         addEventListenerToPanelExtraOption() {
             let panelClose = this.panel.querySelector(".my-dictionary-panel-close");
             let panelMaximizeRestore = this.panel.querySelector(".my-dictionary-panel-maximize-restore");
+            let panelMaximizeRestoreIcon = panelMaximizeRestore.querySelector(".my-dictionary-panel-maximize-restore-icon");
             let panelBack = this.panel.querySelector(".my-dictionary-panel-back");
             let panelForward = this.panel.querySelector(".my-dictionary-panel-forward");
 
@@ -239,11 +241,11 @@
                 this.panel.classList.toggle('my-dictionary-panel-maximized');
                 if (this.panel.classList.contains('my-dictionary-panel-maximized')) {
                     this.panelMaximized = true;
-                    panelMaximizeRestore.innerHTML = '&#128471;';
+                    panelMaximizeRestoreIcon.innerText = 'fullscreen_exit';
                     panelMaximizeRestore.setAttribute('title', 'Restore to default');
                 } else {
                     this.panelMaximized = false;
-                    panelMaximizeRestore.innerHTML = '&#128470;';
+                    panelMaximizeRestoreIcon.innerText = 'fullscreen';
                     panelMaximizeRestore.setAttribute('title', 'Maximize');
 
                 }

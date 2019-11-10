@@ -73,17 +73,17 @@
     padding: 3px 9px 3px 0;
 }
 
-.my-dictionary-panel-extra-options * {
+.my-dictionary-panel-extra-options .material-icons {
     padding: 5px;
     cursor: pointer;
 }
 
-.my-dictionary-panel-extra-options *:hover {
+.my-dictionary-panel-extra-options .material-icons:hover {
     background: lightblue;
 }
 
-.my-dictionary-panel-close:hover {
-    background: red;
+.my-dictionary-panel-close .material-icons:hover {
+    background: red !important;
     color: #fff;
 }
 
