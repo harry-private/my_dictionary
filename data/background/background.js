@@ -51,14 +51,15 @@ chrome.runtime.onInstalled.addListener(function() {
     // alert("Fist time")
     chrome.storage.sync.get(['dictionaries, triggerKey'], result => {
         // console.log(result)
-        if (!result.dictionaries) {
+        if (!'dictionaries' in result) {
             // create dictionary if its first time
             firsTime();
-            // alert("Dictionaries added")
+            alert("Dictionaries added")
         }
 
 
-        if (!result.triggerKey) {
+        // if (!result.triggerKey) {
+        if (!'triggerKey' in result) {
             // if there is no trigger key in the storage I can set here
             // because when this extension gets updated 
             // users may not have that in there storage
