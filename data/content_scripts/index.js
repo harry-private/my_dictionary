@@ -131,19 +131,18 @@
             // overlap icon &#128471;
 
             this.panel.insertAdjacentHTML("afterbegin", `
-          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-          <div class="my-dictionary-panel-extra-options">
-            <span class="my-dictionary-panel-back" title="Go back"><i class="material-icons">arrow_back</i></span>
-            <span class="my-dictionary-panel-forward" title="Go forward"><i class="material-icons">arrow_forward</i></span>
-            <span class="my-dictionary-panel-maximize-restore" title="Maximize"><i class="material-icons my-dictionary-panel-maximize-restore-icon">fullscreen</i></span>
-            <span class="my-dictionary-panel-close" title="Close the panel"><i class="material-icons">clear</i></span>
+        <div class="my-dictionary-panel-extra-options">
+          <span class="my-dictionary-panel-back" title="Go back">🠈</span>
+          <span class="my-dictionary-panel-forward" title="Go forward">🠊</span>
+          <span class="my-dictionary-panel-maximize-restore" title="Maximize">🗖</span>
+          <span class="my-dictionary-panel-close" title="Close the panel">🗙</span>
+        </div>
+        <div class="panel-select-panel-input-conatiner">
+          <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
+          <div class="my-dictionary-query-input-container">
+            <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
           </div>
-          <div class="panel-select-panel-input-conatiner">
-            <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
-            <div class="my-dictionary-query-input-container">
-              <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
-            </div>
-            </div>`);
+          </div>`);
             this.panel.classList.add("my-dictionary-panel");
             if (this.panelMaximized) {
                 this.panel.classList.add('my-dictionary-panel-maximized');
@@ -227,7 +226,6 @@
         addEventListenerToPanelExtraOption() {
             let panelClose = this.panel.querySelector(".my-dictionary-panel-close");
             let panelMaximizeRestore = this.panel.querySelector(".my-dictionary-panel-maximize-restore");
-            let panelMaximizeRestoreIcon = panelMaximizeRestore.querySelector(".my-dictionary-panel-maximize-restore-icon");
             let panelBack = this.panel.querySelector(".my-dictionary-panel-back");
             let panelForward = this.panel.querySelector(".my-dictionary-panel-forward");
 
@@ -241,11 +239,11 @@
                 this.panel.classList.toggle('my-dictionary-panel-maximized');
                 if (this.panel.classList.contains('my-dictionary-panel-maximized')) {
                     this.panelMaximized = true;
-                    panelMaximizeRestoreIcon.innerText = 'fullscreen_exit';
+                    panelMaximizeRestore.innerHTML = '🗗';
                     panelMaximizeRestore.setAttribute('title', 'Restore to default');
                 } else {
                     this.panelMaximized = false;
-                    panelMaximizeRestoreIcon.innerText = 'fullscreen';
+                    panelMaximizeRestore.innerHTML = '🗖';
                     panelMaximizeRestore.setAttribute('title', 'Maximize');
 
                 }
