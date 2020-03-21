@@ -128,6 +128,11 @@
             if ((event.x + popupWidth + offsetX + scrollWidthX) >= window.innerWidth) {
                 this.popup.style.left = `${event.pageX - popupWidth - offsetX}px`;
             }
+
+            if (event.y + popupHeight + offsetY + scrollWidthY >= window.innerHeight) {
+                this.popup.style.top = `${event.pageY - popupHeight - offsetY}px`;
+            }
+
             if ((event.x + popupWidth + offsetX + scrollWidthX) >= window.innerWidth &&
                 (event.x - popupWidth - scrollWidthX <= 0)) {
                 // center the popup
@@ -137,9 +142,10 @@
                 this.popup.style.position = "fixed";
                 this.popup.style.marginLeft = `-${popupWidth / 2}px`; // -91px
 
-            }
-            if (event.y + popupHeight + offsetY + scrollWidthY >= window.innerHeight) {
-                this.popup.style.top = `${event.pageY - popupHeight - offsetY}px`;
+                if (event.y + popupHeight + offsetY + scrollWidthY >= window.innerHeight) {
+                    this.popup.style.top = `${event.y - popupHeight - offsetY}px`;
+                }
+
             }
 
 
