@@ -18,7 +18,7 @@
             this.iframe;
             this.panel;
             this.panelMaximized = false;
-            this.selectedText;
+            this.selectedText = "";
             this.selectedDictionary;
             // appending "my-dictionary-" because StackOverflow has the popup class, so won't work there
             // this.popupIcon.classList.add('my-dictionary-popup-icon');
@@ -30,14 +30,14 @@
             let dictionariesPromise = async () => {
                 return new Promise(resolve => {
                     chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
-                        resolve(result)
+                        resolve(result);
                     })
                 })
             }
             this.dictionaries = await dictionariesPromise();
         }
         createPopup() {
-            this.popupSelect.innerHTML = `${(this.dictionariesOptionsForSelect())}`
+            this.popupSelect.innerHTML = `${(this.dictionariesOptionsForSelect())}`;
             this.popup.appendChild(this.popupSelect);
         }
 
@@ -66,28 +66,27 @@
             }
             return false;
         }
-        getSelection() {
-            this.selection = window.getSelection();
-            return window.getSelection();
-        }
+
         getSelectedText() {
             // this.selectedText = this.selection.toString().replace(/[\.\*\?;!()\+,\[:\]<>^_`\[\]{}~\\\/\"\'=]/g, ' ').trim();
-            this.selectedText = this.selection.toString();
+            // this.selectedText = this.selection.toString();
+            let activeEl = document.activeElement;
+            let activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+            if (
+                (activeElTagName == "textarea") || (activeElTagName == "input" &&
+                    /^(?:text|search|tel|url)$/i.test(activeEl.type)) &&
+                (typeof activeEl.selectionStart == "number")
+            ) {
+                this.selectedText = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+
+            } else if (window.getSelection) {
+                this.selectedText = window.getSelection().toString();
+            }
         }
-        getRelative() {
-            this.relative = document.body.parentNode.getBoundingClientRect();
-        }
-        getBCR() {
-            this.bcr = this.selection.getRangeAt(0).getBoundingClientRect();
-        }
-        getOffset() {
-            this.offset = -1;
-        }
+
         removePopup() {
             if (this.isAdded) {
-                if (this.body.removeChild(this.popup)) {
-                    this.isAdded = false;
-                }
+                if (this.body.removeChild(this.popup)) { this.isAdded = false; }
             }
         }
         isSelectedText(event) {
@@ -109,15 +108,42 @@
             return options;
         }
         showPopup(event) {
-            if (Math.abs(event.clientY - this.bcr.top) > this.bcr.bottom - event.clientY) {
-                // icon will be shown on top
-                this.offset = this.bcr.height + 28;
+
+            // unset some of the styles that was set in the narrow width to center the popup
+            this.popup.style.marginLeft = "unset";
+            this.popup.style.position = "absolute";
+
+            let offsetX = 15;
+            let offsetY = 10;
+
+            // this width and height represent the width and height defined in the index.css
+            let popupWidth = 182;
+            let popupHeight = 30;
+            let scrollWidthX = window.innerHeight - document.documentElement.clientHeight;
+            let scrollWidthY = window.innerWidth - document.documentElement.clientWidth;
+
+            this.popup.style.top = `${event.pageY + offsetY}px`;
+            this.popup.style.left = `${event.pageX + offsetX}px`;
+
+            if ((event.x + popupWidth + offsetX + scrollWidthX) >= window.innerWidth) {
+                this.popup.style.left = `${event.pageX - popupWidth - offsetX}px`;
             }
-            this.popup.style.top = `${this.bcr.bottom - this.relative.top - this.offset}px`; //this will place ele below the selection
-            this.popup.style.left = `${event.clientX + this.html.scrollLeft - 12}px`; //this will place ele below the selection
-            if (this.body.appendChild(this.popup)) {
-                this.isAdded = true;
+            if ((event.x + popupWidth + offsetX + scrollWidthX) >= window.innerWidth &&
+                (event.x - popupWidth - scrollWidthX <= 0)) {
+                // center the popup
+                this.popup.style.top = `${event.y + offsetY}px`;
+                this.popup.style.left = "50%";
+                // unset the below 2 styles at top
+                this.popup.style.position = "fixed";
+                this.popup.style.marginLeft = `-${popupWidth / 2}px`; // -91px
+
             }
+            if (event.y + popupHeight + offsetY + scrollWidthY >= window.innerHeight) {
+                this.popup.style.top = `${event.pageY - popupHeight - offsetY}px`;
+            }
+
+
+            if (this.body.appendChild(this.popup)) { this.isAdded = true; }
         }
         createPanel(event) {
             this.panel = document.createElement("div");
@@ -140,16 +166,17 @@
         <div class="panel-select-panel-input-conatiner">
           <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
           <div class="my-dictionary-query-input-container">
-            <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
+            <input class="my-dictionary-query-input" value="${this.selectedText.trim()}">
           </div>
-          </div>`);
+        </div>
+          `);
             this.panel.classList.add("my-dictionary-panel");
             if (this.panelMaximized) {
                 this.panel.classList.add('my-dictionary-panel-maximized');
             }
-            this.fixedPostionElement.style.display = 'block'
+            this.fixedPostionElement.style.display = 'block';
             this.panel.querySelector('.my-dictionary-panel-select')
-                .addEventListener('change', this.changeDictionary())
+                .addEventListener('change', this.changeDictionary());
             this.addEventListenerToPanelExtraOption();
             this.body.appendChild(this.panel);
         }
@@ -163,8 +190,8 @@
             //     if (!dictionary.isHidden) { firstUnhiddenDictionary = dictionary; return dictionary; }
             // })
             // let firstUnhiddenDictionaryUrl = firstUnhiddenDictionary.url
-            // url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
-            url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.toLocaleLowerCase().trim())
+            // url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.trim())
+            url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.trim())
             this.iframe = document.createElement('iframe');
             this.iframe.classList.add('my-dictionary-iframe');
             this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
@@ -179,7 +206,7 @@
                     let selectedDictionary = panelSelect.options[panelSelect.selectedIndex];
                     let selectedDictionaryUrl = selectedDictionary.dataset.url;
                     let url;
-                    let query = queryInput.value.toLocaleLowerCase().trim();
+                    let query = queryInput.value.trim();
                     url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
                     iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
                 });
@@ -189,7 +216,7 @@
             if (this.panel) {
                 let panelSelect = this.panel.querySelector('.my-dictionary-panel-select');
                 let queryInput = this.panel.querySelector('.my-dictionary-query-input');
-                let queryOld = queryInput.value.toLocaleLowerCase().trim();
+                let queryOld = queryInput.value.trim();
 
                 function delay(fn, ms) {
                     let timer = 0
@@ -206,7 +233,7 @@
                     if (!selectedDictionaryUrl) {
                         selectedDictionaryUrl = this.selectedDictionary.dataset.url;
                     }
-                    let query = queryInput.value.toLocaleLowerCase().trim();
+                    let query = queryInput.value.trim();
                     if ((query != "") && (query != queryOld)) {
                         queryOld = query;
                         url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
@@ -251,11 +278,9 @@
             });
             panelBack.addEventListener('click', () => {
                 history.back();
-                // console.log('this.iframe.contentWindow: ', this.iframe.contentWindow);
             })
             panelForward.addEventListener('click', () => {
                 history.forward();
-                // console.log('this.iframe.contentWindow: ', this.iframe.contentWindow);
             })
 
         }
@@ -264,9 +289,6 @@
     await dictionary.getDictionariesFromLocalStorage();
     document.body.onmouseup = (mouseupEvent) => {
 
-        // console.log(mouseupEvent)
-        // console.log(dictionary.getSelection().toString());
-
         if (mouseupEvent.target.classList.contains('my-dictionary-popup-select') ||
             mouseupEvent.target.closest(".my-dictionary-popup-select") ||
             mouseupEvent.target.closest(".my-dictionary-panel")) { return; }
@@ -274,16 +296,12 @@
             return;
         }
         setTimeout(() => {
-            dictionary.getSelection();
             dictionary.getSelectedText();
-            dictionary.getRelative();
-            dictionary.getOffset();
             dictionary.removePopup();
             // if triggerKey is not pressed don't excute rest of the code
             if (!dictionary.isTriggerKeyPressed(mouseupEvent)) { return; }
             // if no text is selected or clicked element is popup, don't execute the rest of the code
             if (!dictionary.isSelectedText(mouseupEvent)) { return; }
-            dictionary.getBCR();
             dictionary.createPopup()
             dictionary.showPopup(mouseupEvent);
             dictionary.popupSelect.onchange = (evt) => {
