@@ -8,7 +8,7 @@
   "manifest_version": 2,
   "name": "My Dictionary",
   "description": "Get definition or translation of the selected word(s) in popup (multiple choices)",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "permissions": [
     "storage",
     "contextMenus",
