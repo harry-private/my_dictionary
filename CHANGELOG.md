@@ -16,8 +16,8 @@
 ## Version 0.0.6
 - Bug Fixed
 
-Version 0.0.5
-Changed icons
+## Version 0.0.5
+- Changed icons
 
 ## Version 0.0.4
 - Added trigger key, you can select a specific trigger key (Ctrl, Shift, Alt), with this the "choose dictionary" menu will only popup when you have pressed the trigger key
