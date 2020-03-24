@@ -232,6 +232,7 @@
                     }
                 }
                 queryInput.addEventListener("keyup", delay((e) => {
+                    if (e.key === "Escape") { return; }
                     let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
                     let selectedDictionary = panelSelect.options[panelSelect.selectedIndex];
                     let selectedDictionaryUrl = selectedDictionary.dataset.url;
@@ -293,7 +294,18 @@
     }
     let dictionary = new Dictionary();
     await dictionary.getDictionariesFromLocalStorage();
-    document.body.onmouseup = (mouseupEvent) => {
+
+    document.body.addEventListener('keyup', function keyPress(e) {
+        if (e.key === "Escape") {
+            dictionary.removePopup();
+            if (dictionary.panel) {
+                dictionary.body.removeChild(dictionary.panel) && (dictionary.panel = null);
+                dictionary.fixedPostionElement.style.display = 'none';
+            }
+        }
+    });
+
+    document.body.addEventListener("mouseup", (mouseupEvent) => {
 
         if (mouseupEvent.target.classList.contains('my-dictionary-popup-select') ||
             mouseupEvent.target.closest(".my-dictionary-popup-select") ||
@@ -319,5 +331,5 @@
                 dictionary.changeDictionaryQuery();
             }
         })
-    }
+    });
 })()
