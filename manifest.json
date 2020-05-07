@@ -26,7 +26,7 @@
   "browser_action": {
     "default_icon": "data/icons/icon16.png",
     "default_title": "My Dictionary",
-    "default_popup": "data/options/options.html"
+    "default_popup": "data/options/dictionary_for_menu_bar/dictionary_for_menu_bar.html"
   },
   "options_ui": {
     "page": "data/options/options.html",
@@ -55,5 +55,13 @@
       ],
       "all_frames": true
     }
-  ]
+  ],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+M"
+      },
+      "description": "Activate the extension"
+    }
+  }
 }

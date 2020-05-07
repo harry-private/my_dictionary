@@ -357,7 +357,10 @@ my_dictionary - 1.zip
 
 screenshot/
 
-Firefox_my_dictionary.zip
-Chrome_my_dictionary.zip
+#Firefox_my_dictionary.zip
+#Chrome_my_dictionary.zip
+
+firefox_build/
+chrome_build/
 
 HOWTO.md

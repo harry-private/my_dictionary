@@ -1,0 +1,24 @@
+{
+  "name": "my_dictionary",
+  "version": "0.0.10",
+  "description": "Get definition or translation of the selected word(s) in popup (multiple choices)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "chrome": "web-ext run -t chromium",
+    "firefox": "web-ext run",
+    "both": "web-ext run -t firefox-desktop -t chromium",
+    "build-chrome": "web-ext --config=chrome_config.js build",
+    "build-firefox": "web-ext --config=firefox_config.js build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harry-private/my_dictionary.git"
+  },
+  "author": "harry-private",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harry-private/my_dictionary/issues"
+  },
+  "homepage": "https://github.com/harry-private/my_dictionary#readme"
+}

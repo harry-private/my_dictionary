@@ -4,12 +4,14 @@ UIsaveSettings = document.querySelector("#save-settings");
 let UItriggerKey = document.querySelector("#trigger-key");
 
 
+// document.body.style.height = (screen.height - 120) + "px";
+
 chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
     // console.log('result: ', result);
     createDictionariesSettingsLayout(result);
     addNewDictionary();
     sortDictionaries();
-    addEventListenerToDictionarySideoptions();
+    addEventListenerToDictionarySideOptions();
 
     UIsaveSettings.addEventListener("click", function() {
 
@@ -150,7 +152,7 @@ function addNewDictionary() {
             dictionaryTitle.value = "";
             dictionaryUrl.value = "";
             // add eventListener to newly created dictionary
-            addEventListenerToDictionarySideoptions(true)
+            addEventListenerToDictionarySideOptions(true)
 
         }
 
@@ -249,7 +251,7 @@ function templateForDictionary({
     </div>`;
 }
 
-function addEventListenerToDictionarySideoptions(onJustFirstElement = false) {
+function addEventListenerToDictionarySideOptions(onJustFirstElement = false) {
     if (!onJustFirstElement) {
 
         UIallDictionaries = UIdictionriesSettings.querySelectorAll(".dictionary");

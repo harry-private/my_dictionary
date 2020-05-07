@@ -4,12 +4,9 @@
     class Dictionary {
         constructor() {
             this.dictionaries = {};
-            this.panelWidth = 450;
-            this.panelHeight = 300;
             this.body = document.body;
             this.html = document.documentElement;
             this.popup = document.createElement('div');
-            // this.popupIcon = document.createElement('div');
             this.popupSelect = document.createElement('select');
             this.popup.classList.add('my-dictionary-popup');
             this.popupSelect.classList.add('my-dictionary-popup-select');
@@ -21,10 +18,7 @@
             this.selectedText = "";
             this.selectedDictionary;
             // appending "my-dictionary-" because StackOverflow has the popup class, so won't work there
-            // this.popupIcon.classList.add('my-dictionary-popup-icon');
-            // this.createPopup();
-            // this.popup = this.poptest;
-            this.createFixedPostionElement()
+            this.createFixedPositionElement()
         }
         async getDictionariesFromLocalStorage() {
             let dictionariesPromise = async () => {
@@ -53,15 +47,15 @@
 
 
         // this element will be used for black background
-        createFixedPostionElement() {
-            this.fixedPostionElement = document.createElement('div');
-            this.fixedPostionElement.classList.add('create-fixed-postion-element');
-            this.body.appendChild(this.fixedPostionElement);
+        createFixedPositionElement() {
+            this.fixedPositionElement = document.createElement('div');
+            this.fixedPositionElement.classList.add('create-fixed-Position-element');
+            this.body.appendChild(this.fixedPositionElement);
         }
         removePanelWhenClickedOutside(event) {
             if (this.panel && event.target !== this.panel && !this.panel.contains(event.target)) {
                 this.body.removeChild(this.panel) && (this.panel = null);
-                this.fixedPostionElement.style.display = 'none';
+                this.fixedPositionElement.style.display = 'none';
                 return true;
             }
             return false;
@@ -163,24 +157,24 @@
             // overlap icon &#128471;
 
             this.panel.insertAdjacentHTML("afterbegin", `
-        <div class="my-dictionary-panel-extra-options">
-          <span class="my-dictionary-panel-back" title="Go back">🠈</span>
-          <span class="my-dictionary-panel-forward" title="Go forward">🠊</span>
-          <span class="my-dictionary-panel-maximize-restore" title="Maximize">🗖</span>
-          <span class="my-dictionary-panel-close" title="Close the panel">🗙</span>
-        </div>
-        <div class="panel-select-panel-input-conatiner">
-          <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
-          <div class="my-dictionary-query-input-container">
-            <input class="my-dictionary-query-input" value="${this.selectedText.trim()}">
-          </div>
-        </div>
+              <div class="my-dictionary-panel-extra-options">
+                <span class="my-dictionary-panel-back" title="Go back">🠈</span>
+                <span class="my-dictionary-panel-forward" title="Go forward">🠊</span>
+                <span class="my-dictionary-panel-maximize-restore" title="Maximize">🗖</span>
+                <span class="my-dictionary-panel-close" title="Close the panel">🗙</span>
+              </div>
+              <div class="panel-select-panel-input-container">
+                <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
+                <div class="my-dictionary-query-input-container">
+                  <input class="my-dictionary-query-input" value="${this.selectedText.trim()}" autofocus>
+                </div>
+              </div>
           `);
             this.panel.classList.add("my-dictionary-panel");
             if (this.panelMaximized) {
                 this.panel.classList.add('my-dictionary-panel-maximized');
             }
-            this.fixedPostionElement.style.display = 'block';
+            this.fixedPositionElement.style.display = 'block';
             this.panel.querySelector('.my-dictionary-panel-select')
                 .addEventListener('change', this.changeDictionary());
             this.addEventListenerToPanelExtraOption();
@@ -189,65 +183,53 @@
         createIFrame() {
             this.selectedDictionary = this.popupSelect.options[this.popupSelect.selectedIndex];
             let selectedDictionaryUrl = this.selectedDictionary.dataset.url;
-            let url;
-            // let firstUnhiddenDictionary;
-            // // get the first unhidden dictionary
-            // this.dictionaries.dictionaries.some((dictionary) => {
-            //     if (!dictionary.isHidden) { firstUnhiddenDictionary = dictionary; return dictionary; }
-            // })
-            // let firstUnhiddenDictionaryUrl = firstUnhiddenDictionary.url
-            // url = this.createDictionaryUrlForIFrame(firstUnhiddenDictionaryUrl, this.selectedText.trim())
-            url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.trim())
+            let url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.trim())
             this.iframe = document.createElement('iframe');
             this.iframe.classList.add('my-dictionary-iframe');
             this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
             this.panel.appendChild(this.iframe);
         }
         changeDictionary() {
-            if (this.panel) {
-                let panelSelect = this.panel.querySelector('.my-dictionary-panel-select');
-                let queryInput = this.panel.querySelector('.my-dictionary-query-input');
-                panelSelect.addEventListener("change", () => {
-                    let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
-                    let selectedDictionary = panelSelect.options[panelSelect.selectedIndex];
-                    let selectedDictionaryUrl = selectedDictionary.dataset.url;
-                    let url;
-                    let query = queryInput.value.trim();
-                    url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
-                    iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
-                });
-            }
+            if (!this.panel) { return; }
+            // this method should not be needed to call from here, but I don't know why it is not working,
+            //  without this method being called here.
+            this.querySelectorAfterPanelCreated();
+            this.panelSelect.addEventListener("change", () => {
+                let query = this.panelQueryInput.value.trim();
+                if (!query) { return; }
+                let selectedDictionary = this.panelSelect.options[this.panelSelect.selectedIndex];
+                let selectedDictionaryUrl = selectedDictionary.dataset.url;
+                let url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
+                this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
+            });
+
         }
         changeDictionaryQuery() {
-            if (this.panel) {
-                let panelSelect = this.panel.querySelector('.my-dictionary-panel-select');
-                let queryInput = this.panel.querySelector('.my-dictionary-query-input');
-                let queryOld = queryInput.value.trim();
+            if (!this.panel) { return; }
+            let queryOld = this.panelQueryInput.value.trim();
 
-                function delay(fn, ms) {
-                    let timer = 0
-                    return function(...args) {
-                        clearTimeout(timer)
-                        timer = setTimeout(fn.bind(this, ...args), ms || 0)
-                    }
+            function delay(fn, ms) {
+                let timer = 0
+                return function(...args) {
+                    clearTimeout(timer)
+                    timer = setTimeout(fn.bind(this, ...args), ms || 0)
                 }
-                queryInput.addEventListener("keyup", delay((e) => {
-                    if (e.key === "Escape") { return; }
-                    let iframe = document.querySelector('.my-dictionary-panel').querySelector('iframe');
-                    let selectedDictionary = panelSelect.options[panelSelect.selectedIndex];
-                    let selectedDictionaryUrl = selectedDictionary.dataset.url;
-                    let url;
-                    if (!selectedDictionaryUrl) {
-                        selectedDictionaryUrl = this.selectedDictionary.dataset.url;
-                    }
-                    let query = queryInput.value.trim();
-                    if ((query != "") && (query != queryOld)) {
-                        queryOld = query;
-                        url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
-                        iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
-                    }
-                }, 1500));
             }
+            this.panelQueryInput.addEventListener("keyup", delay((e) => {
+                if (e.key === "Escape") { return; }
+                let selectedDictionary = this.panelSelect.options[this.panelSelect.selectedIndex];
+                let selectedDictionaryUrl = selectedDictionary.dataset.url;
+                if (!selectedDictionaryUrl) {
+                    selectedDictionaryUrl = this.selectedDictionary.dataset.url;
+                }
+                let query = this.panelQueryInput.value.trim();
+                if ((query != "") && (query != queryOld)) {
+                    queryOld = query;
+                    let url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
+                    this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
+                }
+            }, 1500));
+
         }
         createDictionaryUrlForIFrame(url, query) {
             if ((url).includes("%s")) {
@@ -265,7 +247,7 @@
 
             panelClose.addEventListener('click', () => {
                 this.body.removeChild(this.panel) && (this.panel = null);
-                this.fixedPostionElement.style.display = 'none';
+                this.fixedPositionElement.style.display = 'none';
             });
 
             panelMaximizeRestore.addEventListener('click', () => {
@@ -291,6 +273,10 @@
             })
 
         }
+        querySelectorAfterPanelCreated() {
+            this.panelSelect = this.panel.querySelector('.my-dictionary-panel-select');
+            this.panelQueryInput = this.panel.querySelector('.my-dictionary-query-input');
+        }
     }
     let dictionary = new Dictionary();
     await dictionary.getDictionariesFromLocalStorage();
@@ -300,7 +286,7 @@
             dictionary.removePopup();
             if (dictionary.panel) {
                 dictionary.body.removeChild(dictionary.panel) && (dictionary.panel = null);
-                dictionary.fixedPostionElement.style.display = 'none';
+                dictionary.fixedPositionElement.style.display = 'none';
             }
         }
     });
@@ -316,7 +302,7 @@
         setTimeout(() => {
             dictionary.getSelectedText();
             dictionary.removePopup();
-            // if triggerKey is not pressed don't excute rest of the code
+            // if triggerKey is not pressed don't execute rest of the code
             if (!dictionary.isTriggerKeyPressed(mouseupEvent)) { return; }
             // if no text is selected or clicked element is popup, don't execute the rest of the code
             if (!dictionary.isSelectedText(mouseupEvent)) { return; }
@@ -327,9 +313,10 @@
                 evt.stopPropagation();
                 evt.preventDefault();
                 dictionary.createPanel(mouseupEvent);
+                dictionary.querySelectorAfterPanelCreated();
                 dictionary.createIFrame();
                 dictionary.changeDictionaryQuery();
             }
         })
     });
-})()
+})();

@@ -7,140 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Options</title>
-    <style>
-        html,
-        body {
-            line-height: 1.6;
-            font-size: 15px;
-            /* min-width: 450px; */
-            /* max-height: 97.2vh;  */
-            overflow: auto;
-            background: #eeeeee;
-        }
-
-        input {
-            outline: none;
-            border: none;
-            border-bottom: 2px solid #aba8a8;
-        }
-
-        input:focus {
-            border-bottom-color: red;
-        }
-
-        .flex-container {
-            padding: 0;
-            margin: 0;
-            /* list-style: none; */
-            /* border: 1px solid silver; */
-            -ms-box-orient: horizontal;
-            display: -webkit-box;
-            display: -moz-box;
-            display: -ms-flexbox;
-            display: -moz-flex;
-            display: -webkit-flex;
-            display: flex;
-        }
-
-        .nowrap {
-            -webkit-flex-wrap: nowrap;
-            flex-wrap: nowrap;
-        }
-
-        .column {
-            flex: 50%;
-            /* padding: 10px;
-      margin: 15px; */
-        }
-
-        .flash-messages {
-            position: fixed;
-            /* top: 5px; */
-            left: 40%;
-            display: none;
-            background: rgb(34, 187, 51);
-            padding: 15px;
-            border-radius: 5px;
-            color: #fff;
-        }
-
-        button {
-            background-color: red;
-            /* Green */
-            border: none;
-            color: white;
-            padding: 10px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 15px;
-            cursor: pointer;
-        }
-
-        input[type=text] {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            -webkit-box-shadow: none;
-            box-shadow: none;
-            border-bottom: 2px solid #aba8a8;
-            outline: none;
-        }
-
-        select:focus {
-            border-bottom-color: red;
-        }
-
-        .main-settings {
-            width: 450px;
-            margin: 0 auto;
-            background: #fff;
-        }
-
-        #dictionaries-settings .dictionary {
-            padding: 5px;
-        }
-
-        #dictionaries-settings .dictionary .dictionary-edited {
-            background: #ebebe4;
-            padding: 15px;
-        }
-
-        .settings-page-link {
-            font-size: 22px;
-            font-weight: 600;
-            text-decoration: none;
-            background: #4a4a4a;
-            padding: 8px;
-            display: inline-block;
-            border-radius: 15px;
-            color: #fff;
-            margin-bottom: 30px;
-        }
-
-        .settings-page-link:hover {
-            background: red;
-        }
-        .dictionary-remove:hover {
-          color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="options.css">
 </head>
 
-<body style="min-width: 450px; min-height: 92vh;">
+<body>
     <div class="flash-messages"></div>
-    <a href="options.html" target="_blank" class="settings-page-link">Settings</a> <a href="https://github.com/harry-private/my_dictionary" target="_blank" class="settings-page-link">Github</a>
-    <br>
-
+    <nav id=top-menu-bar>
+        <a href="dictionary_for_menu_bar/dictionary_for_menu_bar.html" class="settings-page-link">My Dictionary</a>
+        <a href="options.html" class="settings-page-link">Settings</a>
+        <a href="https://github.com/harry-private/my_dictionary" target="_blank" class="settings-page-link">Github</a>
+    </nav>
     <div class="main-settings">
         <!-- <span style="display: inline-block; padding: 15px; background: palevioletred;">Note: no changes will be applied until you click on the "Save Settings" button below.</span> -->
 
@@ -174,16 +50,18 @@
                 <h3>Trigger Key</h3>
                 <!-- <span style="font-size: 12px; font-style: unset"><strong>* First dictionary in the list will be the default dictionary</strong></span><br><br> -->
                 <select name="" id="trigger-key">
-                  <option value="none">None</option>
-                  <option value="ctrlKey">Ctrl</option>
-                  <option value="shiftKey">Shift</option>
-                  <option value="altKey">Alt</option>
+                    <option value="none">None</option>
+                    <option value="ctrlKey">Ctrl</option>
+                    <option value="shiftKey">Shift</option>
+                    <option value="altKey">Alt</option>
                 </select>
             </div>
         </div>
 
 
     </div>
+
+
 
     <br>
     <!--     <hr>
@@ -193,6 +71,7 @@
     <script src="/data/external_libs/sortable.min.js"></script>
     <script src="/data/internal_libs/dictionaries_data.js"></script>
     <script src="options.js"></script>
+
 </body>
 
 </html>

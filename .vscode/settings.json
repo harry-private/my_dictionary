@@ -9,6 +9,9 @@
         ".gitattributes": true,
         ".jsbeautifyrc": true,
         ".vscode": true
-    }
+    },
+    "cSpell.ignoreWords": [
+      "afterbegin"
+    ]
 
 }

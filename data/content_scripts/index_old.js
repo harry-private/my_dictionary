@@ -24,7 +24,7 @@
             // this.popupIcon.classList.add('my-dictionary-popup-icon');
             // this.createPopup();
             // this.popup = this.poptest;
-            this.createFixedPostionElement()
+            this.createFixedPositionElement()
         }
         async getDictionariesFromLocalStorage() {
             let dictionariesPromise = async () => {
@@ -53,15 +53,15 @@
 
 
         // this element will be used for black background
-        createFixedPostionElement() {
-            this.fixedPostionElement = document.createElement('div');
-            this.fixedPostionElement.classList.add('create-fixed-postion-element');
-            this.body.appendChild(this.fixedPostionElement);
+        createFixedPositionElement() {
+            this.fixedPositionElement = document.createElement('div');
+            this.fixedPositionElement.classList.add('create-fixed-Position-element');
+            this.body.appendChild(this.fixedPositionElement);
         }
         removePanelWhenClickedOutside(event) {
             if (this.panel && event.target !== this.panel && !this.panel.contains(event.target)) {
                 this.body.removeChild(this.panel) && (this.panel = null);
-                this.fixedPostionElement.style.display = 'none';
+                this.fixedPositionElement.style.display = 'none';
                 return true;
             }
             return false;
@@ -137,7 +137,7 @@
           <span class="my-dictionary-panel-maximize-restore" title="Maximize">🗖</span>
           <span class="my-dictionary-panel-close" title="Close the panel">🗙</span>
         </div>
-        <div class="panel-select-panel-input-conatiner">
+        <div class="panel-select-panel-input-container ">
           <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
           <div class="my-dictionary-query-input-container">
             <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
@@ -147,7 +147,7 @@
             if (this.panelMaximized) {
                 this.panel.classList.add('my-dictionary-panel-maximized');
             }
-            this.fixedPostionElement.style.display = 'block'
+            this.fixedPositionElement.style.display = 'block'
             this.panel.querySelector('.my-dictionary-panel-select')
                 .addEventListener('change', this.changeDictionary())
             this.addEventListenerToPanelExtraOption();
@@ -231,7 +231,7 @@
 
             panelClose.addEventListener('click', () => {
                 this.body.removeChild(this.panel) && (this.panel = null);
-                this.fixedPostionElement.style.display = 'none';
+                this.fixedPositionElement.style.display = 'none';
             });
 
             panelMaximizeRestore.addEventListener('click', () => {
