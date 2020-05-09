@@ -60,7 +60,7 @@ body {
     border-right: 1px solid #ccc !important;
 }
 
-.my-dictionary-query-input-container {
+.my-dictionary-form {
     width: 100%;
     flex-grow: 1 !important;
     background: #ffffff !important;

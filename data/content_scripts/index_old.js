@@ -139,7 +139,7 @@
         </div>
         <div class="panel-select-panel-input-container ">
           <select class="my-dictionary-panel-select my-dictionary-custom-select">${this.dictionariesOptionsForSelect()}</select>
-          <div class="my-dictionary-query-input-container">
+          <div class="my-dictionary-form">
             <input class="my-dictionary-query-input" value="${this.selectedText.toLowerCase().trim()}">
           </div>
           </div>`);
