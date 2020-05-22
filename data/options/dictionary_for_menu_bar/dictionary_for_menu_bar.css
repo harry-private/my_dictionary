@@ -2,7 +2,7 @@
 body {
     min-height: 550px;
     max-height: 95vh;
-    min-width: 600px;
+    min-width: 750px;
 }
 
 /* @-moz-document url-prefix() {
