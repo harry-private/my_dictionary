@@ -228,12 +228,12 @@ function templateForDictionary({
     return `
     <div ${isGoogleTranslate ? 'id="google-translate"' : ''} class="dictionary" style="">
     <div class="flex-container nowrap" style="justify-content: space-between">
-      <div class="column">${sanitize(title)}</div>
+      <div class="column" title="${sanitize(title)}">${sanitize(title)}</div>
       <div class="column" style="text-align: right">
       <span class="dictionary-edit" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Edit the dictionary"><strong><i class="material-icons">edit</i></strong></span>
       <span class="dictionary-hide" style="font-size: 25px; cursor: pointer; margin-right: 10px" title="Hide the dictionary"><strong><i class="material-icons dictionary-hide-icon">${(isHidden ? 'visibility_off': 'visibility')}</i></strong></span>
       ${(preInstalled ? '' : '<span class="dictionary-remove" style="font-size: 25px; cursor: pointer; margin-right: 10px;" title="Remove the dictionary"><strong><i class="material-icons">delete_forever</i></strong></span>')}
-      <span class="dictionary-drag" style="font-size: 25px; cursor: grab" title="Sort by draging and droping"><strong><i class="material-icons">menu</i></strong></span>
+      <span class="dictionary-drag" style="font-size: 25px; cursor: grab" title="Sort by dragging and dropping"><strong><i class="material-icons">menu</i></strong></span>
       </div>
     </div>
     <div class="dictionary-edited" style="display:none">
