@@ -18,9 +18,10 @@ chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
         let triggerKeyToStore = changeTriggerKey(result);
         let UIdictionaries = UIdictionriesSettings.querySelectorAll(".dictionary");
         let dictionariesToStore = getDictionariesFromInputs(UIdictionaries);
+        if (dictionariesToStore.error == true) return;
         // save the dictionaries to the local storage
         chrome.storage.sync.set({
-            dictionaries: dictionariesToStore,
+            dictionaries: dictionariesToStore.dictionariesToStore,
             triggerKey: triggerKeyToStore
         });
 
@@ -82,44 +83,56 @@ function createDictionariesSettingsLayout(result) {
 
 function getDictionariesFromInputs(dictionaries) {
     let dictionariesToStore = [];
+    let error = false;
     [...dictionaries].forEach(function(dictionary) {
         let dictionariesToStoreObj = {};
         let dictionaryTitle = dictionary.querySelector(".dictionary-title").value;
         let dictionaryId = dictionary.querySelector(".dictionary-id").value;
         let dictionaryUrl = dictionary.querySelector(".dictionary-url").value;
-
-        let dictionaryPreInstalled = dictionary.querySelector(".dictionary-preinstalled").value;
-        let dictionaryIsHidden = dictionary.querySelector('.dictionary-ishidden');
-        if (dictionaryIsHidden) {
-            if (dictionaryIsHidden.value === "true") {
-                dictionariesToStoreObj.isHidden = "true";
+        if ((dictionaryTitle.length >= 30) || (dictionaryTitle.length <= 0)) {
+            let invalidTitleLength = `The title you edited must be between 1 to 30`;
+            showFlashMessages([invalidTitleLength], "red");
+            console.log('invalidTitleLength: ', invalidTitleLength);
+            error = true;
+        } else if (!isValidURL(dictionaryUrl)) {
+            let invalidUrl = `The URL you edited must be valid`;
+            showFlashMessages([invalidUrl], "red");
+            // console.log('invalidUrl: ', invalidUrl);
+            error = true;
+        } else {
+            let dictionaryPreInstalled = dictionary.querySelector(".dictionary-preinstalled").value;
+            let dictionaryIsHidden = dictionary.querySelector('.dictionary-ishidden');
+            if (dictionaryIsHidden) {
+                if (dictionaryIsHidden.value === "true") {
+                    dictionariesToStoreObj.isHidden = "true";
+                }
             }
-        }
-        if (dictionaryPreInstalled === 'true') {
-            if (dictionary.id == 'google-translate') {
-                let dictionaryFrom = dictionary.querySelector(".dictionary-from");
-                let dictionaryTo = dictionary.querySelector(".dictionary-to");
-                let dictionaryFromSelected = getSelectedOption(dictionaryFrom)
-                let dictionaryToSelected = getSelectedOption(dictionaryTo)
-                dictionariesToStoreObj.from = dictionaryFromSelected
-                dictionariesToStoreObj.to = dictionaryToSelected
-                dictionariesToStoreObj.isGoogleTranslate = true;
-            } else {
-                let dictionaryFromTo = dictionary.querySelector(".dictionary-from-to");
-                let dictionaryFromToSelected = getSelectedOption(dictionaryFromTo);
-                dictionariesToStoreObj.fromTo = dictionaryFromToSelected;
+            if (dictionaryPreInstalled === 'true') {
+                if (dictionary.id == 'google-translate') {
+                    let dictionaryFrom = dictionary.querySelector(".dictionary-from");
+                    let dictionaryTo = dictionary.querySelector(".dictionary-to");
+                    let dictionaryFromSelected = getSelectedOption(dictionaryFrom)
+                    let dictionaryToSelected = getSelectedOption(dictionaryTo)
+                    dictionariesToStoreObj.from = dictionaryFromSelected
+                    dictionariesToStoreObj.to = dictionaryToSelected
+                    dictionariesToStoreObj.isGoogleTranslate = true;
+                } else {
+                    let dictionaryFromTo = dictionary.querySelector(".dictionary-from-to");
+                    let dictionaryFromToSelected = getSelectedOption(dictionaryFromTo);
+                    dictionariesToStoreObj.fromTo = dictionaryFromToSelected;
+                }
             }
+
+
+
+            dictionariesToStoreObj.title = dictionaryTitle;
+            dictionariesToStoreObj.id = dictionaryId;
+            dictionariesToStoreObj.url = dictionaryUrl;
+            dictionariesToStoreObj.preInstalled = dictionaryPreInstalled;
+            dictionariesToStore.push(dictionariesToStoreObj);
         }
-
-
-
-        dictionariesToStoreObj.title = dictionaryTitle;
-        dictionariesToStoreObj.id = dictionaryId;
-        dictionariesToStoreObj.url = dictionaryUrl;
-        dictionariesToStoreObj.preInstalled = dictionaryPreInstalled;
-        dictionariesToStore.push(dictionariesToStoreObj);
     });
-    return dictionariesToStore;
+    return { error, dictionariesToStore };
 }
 
 
@@ -136,11 +149,11 @@ function addNewDictionary() {
         let title = (dictionaryTitle.value).trim();
         let url = dictionaryUrl.value;
 
-        if ((title.length >= 50) || (title.length <= 0)) {
-            error.invalidTitleLength = 'Title length should be between 1 to 20';
+        if ((title.length >= 30) || (title.length <= 0)) {
+            error.invalidTitleLength = 'Title length should be between 1 to 30';
             showFlashMessages([error.invalidTitleLength], "red")
         } else if (!isValidURL(url)) {
-            error.invalidUrl = "URL is invalid";
+            error.invalidUrl = "URL must be valid";
             showFlashMessages([error.invalidUrl], "red")
         } else {
             let newDictionaryTemplate = templateForDictionary({
