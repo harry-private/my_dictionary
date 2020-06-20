@@ -1,7 +1,12 @@
 /* appending "my-dictionary-" because StackOverflow has the popup class, so wont work there */
 body {
+    line-height: 1.6;
+    font-size: 15px;
+    overflow: auto;
+    background: #eeeeee;
     min-height: 550px;
-    max-height: 95vh;
+    /* max-height: 90vh; */
+    margin-bottom: 50px;
     min-width: 750px;
 }
 
@@ -113,21 +118,23 @@ input:focus {
 
 
 
-
+#top-menu-bar {
+    text-align: center;
+}
 
 .settings-page-link {
+    border: 1px solid #ccc;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    background: #4a4a4a;
+    background: #e0e0e0;
     padding: 4px 12px;
     display: inline-block;
     border-radius: 15px;
-    color: #fff;
+    color: #786d6d;
     margin-bottom: 12px;
-
 }
 
 .settings-page-link:hover {
-    background: red;
+    background: #d2d3d3;
 }

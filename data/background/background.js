@@ -8,27 +8,19 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
 chrome.webRequest.onHeadersReceived.addListener(function(info) {
         let initiator = (info.initiator || info.originUrl);
-        // return if the request is from main frame, not from the subframe
-        // if (info.frameId === 0) { return; }
-        // console.log('FrameID: ', info.frameId);
-        // console.log('initiator: ', initiator);
         if (
             (initiator == "https://twitter.com/sw.js" && info.type == "xmlhttprequest") ||
             (initiator == "https://twitter.com" && info.type == "xmlhttprequest") ||
             (initiator == 'https://github.com') ||
             (info.type == 'sub_frame')
         ) {
-            // console.log("Type Matched!");
-
             var headers = info.responseHeaders;
             for (var i = headers.length - 1; i >= 0; --i) {
                 var header = headers[i].name.toLowerCase();
                 if (header == 'x-frame-options' || header == 'frame-options') {
-                    // alert(header)
                     headers.splice(i, 1); // Remove header
                 }
                 if (header == 'content-security-policy') {
-                    // alert(header)
                     headers.splice(i, 1); // Remove header
                 }
             }
@@ -47,24 +39,19 @@ chrome.webRequest.onHeadersReceived.addListener(function(info) {
 // })
 
 chrome.runtime.onInstalled.addListener(function() {
-    // alert(googelTraslateLanguages)
-    // alert("Fist time")
-    chrome.storage.sync.get(['dictionaries', 'triggerKey'], result => {
-        console.log(result)
+    chrome.storage.sync.get(['dictionaries', 'triggerKey', 'enableDisable'], result => {
         if (!('dictionaries' in result)) {
-            // create dictionary if its first time
             firsTime();
-            // alert("Dictionaries added")
         }
 
-
-        // if (!result.triggerKey) {
-        if (!('triggerKey' in result)) {
-            // if there is no trigger key in the storage I can set here
+        // I can delete this after couple of updates
+        if (!('enableDisable' in result)) {
+            // if there is no enableDisable key in the storage I can set here
             // because when this extension gets updated 
             // users may not have that in there storage
             // because initially there was no such key
-            setTriggerKeyFirstTime();
+            setEnableDisableFirstTime();
+            setShowChooseDictionaryOptionsFirstTime();
         }
     });
 });
@@ -110,13 +97,30 @@ function firsTime() {
 
         ],
         dictionariesHidden: [],
-        triggerKey: "none"
+        triggerKey: "none",
+        enableDisable: {
+            globally: "enable", //disabled|enabled
+            listMode: "blacklist-mode", //blacklist-mode|whitelist-mode
+            blacklist: [], //["someUrl", "anotherUrl", "sommeAnotherUrl"]
+            whitelist: [] //["someUrl", "anotherUrl", "sommeAnotherUrl"]
+        },
+        showChooseDictionaryOptions: 'yes'
     });
 }
 
-function setTriggerKeyFirstTime() {
-
+function setEnableDisableFirstTime() {
     chrome.storage.sync.set({
-        triggerKey: "none"
+        enableDisable: {
+            globally: "enable", //disabled|enabled
+            listMode: "blacklist-mode", //blacklist-mode|whitelist-mode
+            blacklist: [], //"someUrl", "anotherUrl", "sommeAnotherUrl"
+            whitelist: [] //"someUrl", "anotherUrl", "sommeAnotherUrl"
+        }
+    });
+}
+
+function setShowChooseDictionaryOptionsFirstTime() {
+    chrome.storage.sync.set({
+        showChooseDictionaryOptions: 'yes'
     });
 }

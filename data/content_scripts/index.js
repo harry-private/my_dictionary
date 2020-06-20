@@ -2,8 +2,8 @@
 (async () => {
     'use strict'
     class Dictionary {
-        constructor() {
-            this.dictionaries = {};
+        _constructor() {
+            // this.dictionaries = {};
             this.body = document.body;
             this.html = document.documentElement;
             this.popup = document.createElement('div');
@@ -23,15 +23,15 @@
             // appending "my-dictionary-" because StackOverflow has the popup class, so won't work there
             this.createFixedPositionElement()
         }
-        async getDictionariesFromLocalStorage() {
-            let dictionariesPromise = async () => {
+        async getDataFromLocalStorage() {
+            let localStorageDataPromise = async () => {
                 return new Promise(resolve => {
-                    chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
+                    chrome.storage.sync.get(['dictionaries', "triggerKey", "enableDisable", "showChooseDictionaryOptions"], result => {
                         resolve(result);
                     })
                 })
             }
-            this.dictionaries = await dictionariesPromise();
+            this.localStorageData = await localStorageDataPromise();
         }
         createPopup() {
             this.popupSelect.innerHTML = `${(this.dictionariesOptionsForSelect())}`;
@@ -41,13 +41,31 @@
         isTriggerKeyPressed(mouseupEvent) {
             let triggerKeysNotNone = ["ctrlKey", "shiftKey", "altKey"];
             // storage triggerKey
-            let isStorageTriggerKeyNotNone = (triggerKeysNotNone.indexOf(this.dictionaries.triggerKey) > -1);
+            let isStorageTriggerKeyNotNone = (triggerKeysNotNone.indexOf(this.localStorageData.triggerKey) > -1);
             // check if set triggerKey is not "none"
             if (isStorageTriggerKeyNotNone) {
-                return (mouseupEvent[this.dictionaries.triggerKey]) ? true : false;
+                return (mouseupEvent[this.localStorageData.triggerKey]) ? true : false;
             } else { return true; }
         }
 
+        isGloballyDisabled() {
+            return (this.localStorageData.enableDisable.globally === "disable") ? true : false;
+        }
+        isCurrentWebsiteIsAllowed() {
+            // blacklist/whitelist check
+            let allowed = true;
+            let currentWebsiteUrl = window.location.protocol + "//" + this.removeWWWBeginningOfHostName(window.location.hostname);
+            if (this.localStorageData.enableDisable.listMode == "blacklist-mode") {
+                if (this.localStorageData.enableDisable.blacklist.includes(currentWebsiteUrl)) {
+                    allowed = false;
+                }
+            } else if (this.localStorageData.enableDisable.listMode == "whitelist-mode") {
+                if (!this.localStorageData.enableDisable.whitelist.includes(currentWebsiteUrl)) {
+                    allowed = false;
+                }
+            }
+            return allowed;
+        }
 
         // this element will be used for black background
         createFixedPositionElement() {
@@ -97,7 +115,7 @@
         }
         dictionariesOptionsForSelect() {
             let options = '<option selected disabled>Choose Dictionary</option>';
-            this.dictionaries.dictionaries.forEach(function(dictionary) {
+            this.localStorageData.dictionaries.forEach(function(dictionary) {
                 if (!dictionary.isHidden) {
                     options += `<option data-url="${dictionary.url.replace(/"/g, '&quot;').replace(/'/g, '&#x27;')}">${dictionary.title}</option>`
                 }
@@ -148,6 +166,9 @@
 
             if (this.body.appendChild(this.popup)) { this.isAdded = true; }
         }
+        showChooseDictionaryOptions() {
+            return (this.localStorageData.showChooseDictionaryOptions == 'yes' ? true : false);
+        }
         createPanel(event) {
             this.panel = document.createElement("div");
             this.panel.insertAdjacentHTML("afterbegin", `
@@ -178,9 +199,15 @@
             this.body.appendChild(this.panel);
         }
         createIFrame() {
-            this.selectedDictionary = this.popupSelect.options[this.popupSelect.selectedIndex];
-            let selectedDictionaryUrl = this.selectedDictionary.dataset.url;
-            let url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.trim())
+            let url;
+            if (this.showChooseDictionaryOptions()) {
+                this.selectedDictionary = this.popupSelect.options[this.popupSelect.selectedIndex];
+                let selectedDictionaryUrl = this.selectedDictionary.dataset.url;
+                url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, this.selectedText.trim())
+            } else {
+                let firstDictionaryUrl = this.localStorageData.dictionaries[0].url;
+                url = this.createDictionaryUrlForIFrame(firstDictionaryUrl, this.selectedText.trim())
+            }
             this.iframe = document.createElement('iframe');
             this.iframe.classList.add('my-dictionary-iframe');
             this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
@@ -208,7 +235,11 @@
                 let selectedDictionary = this.panelSelect.options[this.panelSelect.selectedIndex];
                 let selectedDictionaryUrl = selectedDictionary.dataset.url;
                 if (!selectedDictionaryUrl) {
-                    selectedDictionaryUrl = this.selectedDictionary.dataset.url;
+                    if (this.showChooseDictionaryOptions()) {
+                        selectedDictionaryUrl = this.selectedDictionary.dataset.url;
+                    } else {
+                        selectedDictionaryUrl = this.localStorageData.dictionaries[0].url;
+                    }
                 }
                 let url = this.createDictionaryUrlForIFrame(selectedDictionaryUrl, query);
                 this.iframe.src = chrome.runtime.getURL('data/iframe/iframe.html?url=' + encodeURIComponent(url));
@@ -256,9 +287,20 @@
             })
 
         }
+
+        removeWWWBeginningOfHostName(hostname) {
+            // console.log(hostname);
+            return hostname.replace(/^www\./, '');
+        }
     }
     let dictionary = new Dictionary();
-    await dictionary.getDictionariesFromLocalStorage();
+    await dictionary.getDataFromLocalStorage();
+
+    if (dictionary.isGloballyDisabled()) return;
+
+    if (!dictionary.isCurrentWebsiteIsAllowed()) return;
+
+    dictionary._constructor();
 
     document.body.addEventListener('keyup', function keyPress(e) {
         if (e.key === "Escape") {
@@ -283,8 +325,18 @@
             dictionary.removePopup();
             // if triggerKey is not pressed don't execute rest of the code
             if (!dictionary.isTriggerKeyPressed(mouseupEvent)) { return; }
+
+
             // if no text is selected or clicked element is popup, don't execute the rest of the code
             if (!dictionary.isSelectedText(mouseupEvent)) { return; }
+
+            if (!dictionary.showChooseDictionaryOptions()) {
+                dictionary.createPanel(mouseupEvent);
+                dictionary.createIFrame();
+                dictionary.changeDictionaryQuery();
+                return;
+            }
+
             dictionary.createPopup()
             dictionary.showPopup(mouseupEvent);
             dictionary.popupSelect.onchange = (evt) => {

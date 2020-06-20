@@ -15,7 +15,7 @@
         async getDictionariesFromLocalStorage() {
             let dictionariesPromise = async () => {
                 return new Promise(resolve => {
-                    chrome.storage.sync.get(['dictionaries', "triggerKey"], result => {
+                    chrome.storage.sync.get(['dictionaries', "triggerKey", "enable_disable"], result => {
                         resolve(result);
                     })
                 })
