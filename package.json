@@ -1,6 +1,6 @@
 {
   "name": "my_dictionary",
-  "version": "0.0.10",
+  "version": "1.0.00",
   "description": "Get definition or translation of the selected word(s) in popup (multiple choices)",
   "main": "index.js",
   "scripts": {

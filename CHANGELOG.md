@@ -1,3 +1,12 @@
+## Version 1.0.00
+- ### [ADDED]
+  - Dictionary can be viewed from the toolbar/menu bar (Default shortcut: Alt+m on Windows Option+m on Mac)
+  - Enable or disable the extension globally or website wise
+  - Option to show or skip the `Choose Dictionary Options` menu
+  
+- ### [CHANGED]
+  - Little changes in the UI
+
 ## Version 0.0.10
 - ### [ADDED]
   - Hide/Remove the select-popup and dictionary panel when "Escape" key is pressed.
